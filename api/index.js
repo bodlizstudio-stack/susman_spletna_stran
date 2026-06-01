@@ -10,7 +10,7 @@ const multer = require('multer');
 
 // Root is one level up because index.js is inside the /api/ folder
 const ROOT = path.join(__dirname, '..');
-const NELTI_ROOT = path.join(ROOT, 'portfolij nelti');
+const NELTI_ROOT = path.join(ROOT, 'portfolij-nelti');
 const PORT = Number(process.env.PORT) || 5000;
 
 const app = express();
@@ -219,11 +219,11 @@ const HTML_PAGES = [
     'configurator_mobile',
 ];
 HTML_PAGES.forEach((name) => {
-    // If accessed as /portfolij%20nelti/contact -> redirect to /portfolij%20nelti/contact.html
-    app.get(`/portfolij%20nelti/${name}`, (req, res) => {
-        res.redirect(302, `/portfolij%20nelti/${name}.html`);
+    // If accessed as /portfolij-nelti/contact -> redirect to /portfolij-nelti/contact.html
+    app.get(`/portfolij-nelti/${name}`, (req, res) => {
+        res.redirect(302, `/portfolij-nelti/${name}.html`);
     });
-    app.get(`/portfolij%20nelti/${name}.html`, (req, res, next) => {
+    app.get(`/portfolij-nelti/${name}.html`, (req, res, next) => {
         next();
     });
 });
@@ -240,7 +240,7 @@ ensureDirs()
             const HOST = process.env.HOST || '0.0.0.0';
             const server = app.listen(PORT, HOST, () => {
                 console.log(`Landing Page: http://localhost:${PORT}/`);
-                console.log(`Nelti Shop: http://localhost:${PORT}/portfolij%20nelti/`);
+                console.log(`Nelti Shop: http://localhost:${PORT}/portfolij-nelti/`);
             });
             server.on('error', (err) => {
                 if (err.code === 'EADDRINUSE') {
