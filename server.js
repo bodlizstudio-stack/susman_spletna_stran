@@ -171,8 +171,13 @@ app.post(
             image: imagePath,
         });
 
-        await fs.writeFile(path.join(NELTI_ROOT, 'products.json'), JSON.stringify(products, null, 4), 'utf8');
-        res.json({ ok: true, message: 'PRODUCT ADDED' });
+        try {
+            await fs.writeFile(path.join(NELTI_ROOT, 'products.json'), JSON.stringify(products, null, 4), 'utf8');
+            res.json({ ok: true, message: 'PRODUCT ADDED' });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ ok: false, error: 'Could not write products file (possibly read-only filesystem).' });
+        }
     }
 );
 
@@ -189,8 +194,14 @@ app.post('/api/admin/products/delete', requireAuth, async (req, res) => {
     }
 
     products = products.filter((p) => p.id !== deleteId);
-    await fs.writeFile(path.join(NELTI_ROOT, 'products.json'), JSON.stringify(products, null, 4), 'utf8');
-    res.json({ ok: true, message: 'PRODUCT DELETED' });
+    
+    try {
+        await fs.writeFile(path.join(NELTI_ROOT, 'products.json'), JSON.stringify(products, null, 4), 'utf8');
+        res.json({ ok: true, message: 'PRODUCT DELETED' });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ ok: false, error: 'Could not write products file (possibly read-only filesystem).' });
+    }
 });
 
 app.get('/api/health', (req, res) => {
@@ -223,21 +234,27 @@ app.use('/uploads', express.static(path.join(NELTI_ROOT, 'uploads')));
 
 ensureDirs()
     .then(() => {
-        const HOST = process.env.HOST || '0.0.0.0';
-        const server = app.listen(PORT, HOST, () => {
-            console.log(`Landing Page: http://localhost:${PORT}/`);
-            console.log(`Nelti Shop: http://localhost:${PORT}/portfolij%20nelti/`);
-        });
-        server.on('error', (err) => {
-            if (err.code === 'EADDRINUSE') {
-                console.error(`Port ${PORT} is already in use. Close the other app or run: set PORT=5001&&npm start`);
-            } else {
-                console.error(err);
-            }
-            process.exit(1);
-        });
+        if (require.main === module || !process.env.VERCEL) {
+            const HOST = process.env.HOST || '0.0.0.0';
+            const server = app.listen(PORT, HOST, () => {
+                console.log(`Landing Page: http://localhost:${PORT}/`);
+                console.log(`Nelti Shop: http://localhost:${PORT}/portfolij%20nelti/`);
+            });
+            server.on('error', (err) => {
+                if (err.code === 'EADDRINUSE') {
+                    console.error(`Port ${PORT} is already in use. Close the other app or run: set PORT=5001&&npm start`);
+                } else {
+                    console.error(err);
+                }
+                process.exit(1);
+            });
+        }
     })
     .catch((err) => {
         console.error(err);
-        process.exit(1);
+        if (!process.env.VERCEL) {
+            process.exit(1);
+        }
     });
+
+module.exports = app;
