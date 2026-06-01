@@ -73,8 +73,9 @@ function requireAuth(req, res, next) {
 // ——— Products (public read) ———
 app.get('/api/products', async (req, res) => {
     try {
-        const raw = await fs.readFile(path.join(NELTI_ROOT, 'products.json'), 'utf8');
-        res.type('json').send(raw);
+        delete require.cache[require.resolve('../portfolij-nelti/products.json')];
+        const products = require('../portfolij-nelti/products.json');
+        res.json(products);
     } catch (e) {
         res.json([]);
     }
@@ -132,8 +133,9 @@ app.get('/api/admin/me', (req, res) => {
 
 app.get('/api/admin/products', requireAuth, async (req, res) => {
     try {
-        const raw = await fs.readFile(path.join(NELTI_ROOT, 'products.json'), 'utf8');
-        res.type('json').send(raw);
+        delete require.cache[require.resolve('../portfolij-nelti/products.json')];
+        const products = require('../portfolij-nelti/products.json');
+        res.json(products);
     } catch {
         res.json([]);
     }
