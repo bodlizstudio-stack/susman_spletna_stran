@@ -1,0 +1,654 @@
+/**
+ * Mobile-first overrides (≤768px).
+ * Loaded with media="(max-width: 768px)" — desktop never parses these rules.
+ */
+
+:root {
+    --border-width: 3px;
+    --shadow: 6px 6px 0px #121212;
+    --shadow-hover: 8px 8px 0px #121212;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* No hover “jump” on touch devices */
+@media (hover: none) {
+    .brutal-box:hover,
+    .product-card:hover,
+    .btn:hover {
+        transform: none;
+    }
+    .brutal-box:hover {
+        box-shadow: var(--shadow);
+    }
+    .product-card:hover {
+        box-shadow: var(--shadow);
+    }
+}
+
+/* ——— Header & slide-down nav ——— */
+header {
+    position: relative;
+    padding-top: env(safe-area-inset-top, 0);
+}
+
+.nav-container {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+}
+
+.logo {
+    font-size: clamp(0.75rem, 3.5vw, 1.1rem) !important;
+    padding: 0.25rem 0.5rem !important;
+    line-height: 1.2;
+    max-width: min(52vw, 200px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logo:has(img) {
+    max-width: min(50vw, 200px);
+    white-space: normal;
+    overflow: visible;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.logo img {
+    max-height: 44px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.nav-toggle {
+    display: inline-flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
+    background: var(--text-color);
+    color: #fff;
+    border: var(--border-width) solid var(--border-color);
+    box-shadow: 3px 3px 0 var(--border-color);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.nav-toggle-bar {
+    display: block;
+    width: 22px;
+    height: 3px;
+    background: #fff;
+    border-radius: 1px;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex: none;
+    display: block;
+    justify-content: initial;
+    z-index: 200;
+    background: #fff;
+    border-bottom: var(--border-width) solid var(--border-color);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: max-height 0.35s ease, visibility 0.35s;
+}
+
+.site-nav.is-open {
+    max-height: min(70vh, 420px);
+    overflow-y: auto;
+    visibility: visible;
+    -webkit-overflow-scrolling: touch;
+}
+
+.site-nav ul {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0.5rem 0 1rem;
+}
+
+.site-nav li {
+    border-bottom: 1px solid #eee;
+}
+
+.site-nav a {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+    min-height: 44px;
+}
+
+.cart-icon {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Dark admin bar: dropdown must stay readable */
+.admin-top-header .site-nav {
+    background: var(--text-color);
+    border-bottom-color: var(--accent-3);
+}
+
+.admin-top-header .site-nav li {
+    border-bottom-color: #333;
+}
+
+.admin-top-header .site-nav a {
+    color: #fff !important;
+}
+
+/* ——— Typography ——— */
+h1 {
+    font-size: clamp(2rem, 9vw, 2.75rem) !important;
+    line-height: 1.05;
+}
+
+h2 {
+    font-size: clamp(1.35rem, 6vw, 1.85rem) !important;
+}
+
+h3 {
+    font-size: clamp(1.1rem, 4.5vw, 1.45rem) !important;
+}
+
+p {
+    font-size: 1rem;
+}
+
+/* ——— Hero & home sections ——— */
+.hero {
+    min-height: auto;
+    grid-template-columns: 1fr;
+}
+
+.hero-content {
+    padding: 1.75rem 1.25rem;
+    border-right: none;
+    border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.hero p {
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-image {
+    padding: 1.25rem;
+    min-height: 220px;
+}
+
+.hero-image img {
+    transform: rotate(2deg);
+    max-height: 55vh;
+    object-fit: contain;
+}
+
+.hero .btn {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    padding: 1rem 1.25rem;
+    font-size: clamp(1rem, 4vw, 1.15rem);
+    min-height: 48px;
+    box-sizing: border-box;
+}
+
+.how-it-works-section {
+    padding: 2.5rem 1rem !important;
+}
+
+.how-it-works-inner {
+    padding: 1.75rem 1.25rem !important;
+    max-width: 100% !important;
+}
+
+.how-it-works-inner ol {
+    font-size: 1.05rem !important;
+    line-height: 1.65 !important;
+    padding-left: 1.25rem !important;
+}
+
+.reviews-section {
+    padding: 2.5rem 1rem !important;
+}
+
+.reviews-section .grid .brutal-box {
+    transform: none !important;
+}
+
+.reviews-section .brutal-box p {
+    font-size: 1rem !important;
+    line-height: 1.5;
+}
+
+.reviews-section .brutal-box {
+    padding: 1.25rem !important;
+}
+
+.reviews-section .section-title {
+    display: inline-block;
+    max-width: calc(100% - 2rem);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-title {
+    margin-bottom: 2rem;
+    transform: none;
+    font-size: clamp(1.2rem, 5vw, 1.6rem) !important;
+    padding: 0.65rem 1rem;
+}
+
+.product-section {
+    padding: 2.5rem 1rem;
+}
+
+.product-section .section-title {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.product-card {
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.product-card .product-info {
+    padding: 1.25rem;
+}
+
+.product-card .btn {
+    min-height: 48px;
+    font-size: 1rem;
+    touch-action: manipulation;
+}
+
+.grid {
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+}
+
+/* ——— Footer ——— */
+footer {
+    padding: 2rem 1rem max(1.5rem, env(safe-area-inset-bottom));
+}
+
+.footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.footer-col h4 {
+    font-size: 1.15rem;
+}
+
+.footer-col p,
+.footer-col a {
+    font-size: 0.95rem;
+}
+
+.newsletter-form {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.newsletter-form .form-input {
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-form .btn {
+    width: 100%;
+}
+
+/* ——— Checkout ——— */
+.checkout-layout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+}
+
+.checkout-form-section,
+.checkout-summary-section {
+    padding: 1.5rem 1rem !important;
+}
+
+.checkout-form-section h1 {
+    font-size: 1.75rem !important;
+}
+
+.checkout-grand-total {
+    font-size: 1.35rem !important;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.form-row-2 {
+    grid-template-columns: 1fr !important;
+}
+
+/* ——— Contact split layout ——— */
+.contact-page-layout {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+}
+
+.contact-page-layout > div:first-child {
+    border-right: none !important;
+    border-bottom: var(--border-width) solid var(--border-color);
+    padding: 2rem 1.25rem !important;
+}
+
+.contact-page-layout > div:first-child h2 {
+    font-size: clamp(1.75rem, 8vw, 2.25rem) !important;
+}
+
+.contact-page-layout > div:first-child #floating-envelope {
+    font-size: 4.5rem !important;
+}
+
+.contact-page-layout > div:last-child {
+    padding: 1.5rem 1rem !important;
+}
+
+.contact-page-layout h1 {
+    font-size: 1.75rem !important;
+}
+
+/* Contact success */
+#send-success-screen {
+    min-height: auto !important;
+    padding: 2rem 1rem !important;
+}
+
+#send-success-screen h1 {
+    font-size: clamp(1.75rem, 7vw, 2.25rem) !important;
+}
+
+#send-success-screen .success-stamp {
+    font-size: 3.5rem !important;
+}
+
+#send-success-screen .btn {
+    width: 100%;
+    text-align: center;
+}
+
+/* ——— Admin ——— */
+.admin-dashboard {
+    padding: 1.5rem 1rem;
+}
+
+.admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.admin-header .btn {
+    width: 100%;
+    text-align: center;
+}
+
+.dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.auth-wrapper {
+    padding: 1rem;
+    min-height: calc(100dvh - 80px);
+}
+
+.auth-form {
+    padding: 2rem 1.25rem !important;
+}
+
+.auth-form h1 {
+    font-size: 1.75rem !important;
+}
+
+/* ——— Portfolio ribbon ——— */
+.portfolio-ribbon {
+    bottom: max(12px, env(safe-area-inset-bottom));
+    right: max(10px, env(safe-area-inset-right));
+    font-size: 0.65rem;
+    padding: 0.45rem 0.75rem;
+    max-width: calc(100vw - 24px);
+    text-align: center;
+    white-space: normal;
+    line-height: 1.2;
+}
+
+/* ——— Toasts ——— */
+#toast-container {
+    left: max(12px, env(safe-area-inset-left));
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    width: auto;
+}
+
+.toast {
+    font-size: 0.95rem;
+    padding: 1rem 1.25rem;
+}
+
+/* ——— Cart drawer ——— */
+.cart-drawer {
+    width: 100% !important;
+    max-width: 100vw;
+    right: -100%;
+}
+
+.cart-drawer-header h2 {
+    font-size: 1.35rem !important;
+}
+
+/* ——— Page transition (scissors) ——— */
+.scissor-label {
+    font-size: clamp(2rem, 12vw, 3.5rem) !important;
+}
+
+.scissor-icon {
+    font-size: 2.5rem !important;
+}
+
+.scissor-badge {
+    font-size: 1rem !important;
+    padding: 0.75rem 1.25rem;
+    white-space: normal;
+    text-align: center;
+    max-width: 90vw;
+}
+
+/* ——— Checkout modal ——— */
+#order-confirm-modal > div {
+    padding: 2rem 1.25rem !important;
+    margin: 1rem;
+    max-width: calc(100vw - 2rem) !important;
+}
+
+#order-confirm-modal h1 {
+    font-size: 1.5rem !important;
+}
+
+#order-confirm-modal > div > div:first-child {
+    font-size: 3rem !important;
+}
+
+/* ——— Configurator (desktop page if ever shown small) ——— */
+.ci-layout {
+    grid-template-columns: 1fr !important;
+}
+
+.ci-canvas-area {
+    padding: 1.5rem 0.75rem;
+    min-height: 40vh;
+}
+
+.ci-sidebar {
+    max-height: none;
+}
+
+/* ——— Configurator mobile page ——— */
+.mobile-layout .mobile-3d-stage {
+    height: min(42vh, 320px);
+}
+
+.mobile-2d-stage {
+    padding: 0.75rem;
+}
+
+/* 3D + 2D: avoid browser scroll/zoom stealing drags on touch */
+.mobile-layout #webgl-container canvas {
+    display: block;
+    touch-action: none;
+}
+
+.mobile-layout .canvas-container {
+    touch-action: none;
+}
+
+#map-wrapper-front,
+#map-wrapper-back {
+    width: min(92vw, 320px) !important;
+    height: auto !important;
+    aspect-ratio: 280 / 360;
+}
+
+.tool-panel-mobile {
+    padding: 1rem 0.75rem;
+}
+
+.color-options-mobile {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.35rem;
+}
+
+.color-btn {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.size-options {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.size-btn {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* Mobile 3D studio: color swatches visible on small screens */
+.mobile-product-panel .color-btn {
+    border: 2px solid var(--border-color);
+    box-sizing: border-box;
+}
+
+.mobile-product-panel .color-btn.active {
+    outline: 3px solid var(--text-color);
+    outline-offset: 1px;
+}
+
+/* Extra-narrow phones */
+@media (max-width: 380px) {
+    .logo {
+        max-width: 46vw;
+    }
+
+    .hero-content {
+        padding: 1.35rem 1rem;
+    }
+
+    .how-it-works-inner ol {
+        font-size: 0.98rem !important;
+    }
+
+    .section-title {
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Form controls: comfortable tap targets */
+.form-input,
+.checkout-form-section .btn,
+.contact-page-layout .btn,
+#send-btn {
+    min-height: 48px;
+    font-size: 16px;
+}
+
+textarea.form-input {
+    min-height: 140px;
+}
+
+/* Sticky header: subtle separation on scroll-capable viewports */
+header {
+    box-shadow: 0 2px 0 rgba(18, 18, 18, 0.08);
+}
+
+/* Product grid loading / error line */
+#product-grid > p:first-child {
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+#product-grid code {
+    font-size: 0.8rem;
+    word-break: break-all;
+}

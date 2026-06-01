@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="sl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#A5D1E8" />
+  <meta name="description" content="PRO-S galerija — montaže in servisi klimatskih naprav po Sloveniji." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <title>Galerija | PRO-S</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#A5D1E8',
+              'blue-dark': '#5BA3C9',
+              'blue-deep': '#3B82B5',
+              'blue-soft': '#E8F4FA',
+              black: '#0a0a0a',
+              ink: '#1a1d23',
+            },
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    html, body { -webkit-tap-highlight-color: transparent; }
+    .glass {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+    }
+    .gallery-card { cursor: zoom-in; }
+    @media (hover: hover) {
+      .gallery-card .gallery-title { opacity: 0; transform: translateY(0.5rem); }
+      .gallery-card:hover .gallery-title { opacity: 1; transform: translateY(0); }
+      .gallery-card:hover .gallery-overlay { background-color: rgba(10, 10, 10, 0.45); }
+    }
+    @media (hover: none) {
+      .gallery-card .gallery-overlay { background: linear-gradient(to top, rgba(10,10,10,0.75) 0%, transparent 55%); }
+      .gallery-card .gallery-title { opacity: 1; transform: none; }
+    }
+    #lightbox.open { display: flex; }
+    #lightbox { display: none; }
+    #lightbox.open #lightbox-img { animation: zoomIn 0.35s ease-out; }
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-reveal { opacity: 1; transform: none; transition: none; }
+    }
+    .pt-safe { padding-top: env(safe-area-inset-top); }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  </style>
+</head>
+<body class="font-sans text-brand-ink bg-white antialiased">
+
+  <header class="fixed top-0 inset-x-0 z-50 glass border-b border-gray-100 pt-safe">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <a href="index.html" class="shrink-0" aria-label="PRO-S domov">
+          <img src="logo.png" alt="PRO-S" class="h-10 sm:h-12 md:h-14 w-auto" />
+        </a>
+        <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold">
+          <a href="index.html" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Domov</a>
+          <a href="index.html#ponudba" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Ponudba klim</a>
+          <a href="index.html#storitve" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Storitve</a>
+          <a href="galerija.html" class="text-brand-blue-deep font-bold">Galerija</a>
+          <a href="index.html#kontakt" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Kontakt</a>
+        </nav>
+        <a href="index.html#kontakt" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-all">
+          Kontaktirajte nas
+        </a>
+        <button id="menu-btn" type="button" class="md:hidden p-2.5 -mr-2 rounded-xl hover:bg-gray-100" aria-label="Meni" aria-expanded="false">
+          <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-1 text-base font-semibold">
+      <a href="index.html" class="mobile-nav px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Domov</a>
+      <a href="index.html#ponudba" class="mobile-nav px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Ponudba klim</a>
+      <a href="index.html#storitve" class="mobile-nav px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Storitve</a>
+      <a href="galerija.html" class="px-3 py-3 rounded-lg bg-brand-blue-soft text-brand-blue-deep font-bold">Galerija</a>
+      <a href="index.html#kontakt" class="mobile-nav px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Kontakt</a>
+    </div>
+  </header>
+
+  <main class="pt-24 sm:pt-28 pb-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10 md:mb-12 scroll-reveal">
+        <p class="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-bold uppercase tracking-wider bg-brand-blue/30 text-brand-blue-deep rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-blue-deep"></span>
+          Galerija
+        </p>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-black mb-4">Vsi izvedeni projekti</h1>
+        <p class="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
+          Premaknite miško čez fotografijo za prikaz vrste montaže ali storitve. Kliknite za povečavo.
+        </p>
+      </div>
+
+      <div id="gallery-full" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"></div>
+
+      <p class="mt-10 text-center text-sm text-gray-500">
+        <span id="gallery-count"></span> fotografij ·
+        <a href="index.html#kontakt" class="text-brand-blue-deep font-semibold hover:underline">Kontaktirajte nas</a> za podoben projekt
+      </p>
+    </div>
+  </main>
+
+  <footer class="border-t border-gray-100 bg-gray-50 pb-safe">
+    <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <a href="index.html" class="inline-flex items-center gap-2 font-semibold text-brand-black hover:text-brand-blue-deep">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Nazaj na domov
+      </a>
+      <p>&copy; <span id="year"></span> PRO-S</p>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="fixed inset-0 z-[100] flex-col items-center justify-center p-4 sm:p-8 bg-brand-black/85 backdrop-blur-md" role="dialog" aria-modal="true">
+    <button type="button" id="lightbox-close" class="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center z-10" aria-label="Zapri">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <figure class="max-w-5xl w-full flex flex-col items-center">
+      <div class="relative w-full flex justify-center">
+        <img id="lightbox-img" src="" alt="" class="hidden w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl bg-white" />
+        <div id="lightbox-placeholder" class="hidden w-full max-w-2xl aspect-[4/3] rounded-2xl bg-gradient-to-br from-brand-blue-soft to-brand-blue/40 flex items-center justify-center p-8">
+          <p class="text-center text-white font-bold text-xl"></p>
+        </div>
+      </div>
+      <figcaption id="lightbox-caption" class="mt-4 text-center text-white text-lg font-semibold"></figcaption>
+      <div id="lightbox-more" class="hidden"></div>
+    </figure>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+    menuBtn.addEventListener('click', () => {
+      const hidden = mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!hidden));
+      iconOpen.classList.toggle('hidden', !hidden);
+      iconClose.classList.toggle('hidden', hidden);
+    });
+    document.querySelectorAll('.mobile-nav').forEach((l) => l.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    }));
+  </script>
+  <script src="scroll-reveal.js"></script>
+  <script src="gallery-data.js"></script>
+  <script src="gallery.js"></script>
+  <script>
+    initGalleryGrid('gallery-full', GALLERY_ITEMS, {
+      gridClass: 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4',
+    });
+    document.getElementById('gallery-count').textContent = GALLERY_ITEMS.length;
+    initLightbox(false);
+    initScrollReveal();
+
+    const params = new URLSearchParams(location.search);
+    const openIdx = params.get('foto');
+    if (openIdx !== null && GALLERY_ITEMS[openIdx]) {
+      const item = GALLERY_ITEMS[openIdx];
+      setTimeout(() => {
+        document.querySelector(`.gallery-card[data-index="${openIdx}"]`)?.click();
+      }, 300);
+    }
+  </script>
+</body>
+</html>

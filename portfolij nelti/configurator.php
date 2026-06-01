@@ -1,0 +1,267 @@
+<?php
+// Configurator Page - 3D Three.js Edition with Decal Mapping
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>3D Design Studio - Portfolio Sample</title>
+    <meta name="description" content="Customize your premium 3D t-shirt using our interactive Design Lab. Portfolio Sample showcase.">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Impact&family=Space+Grotesk:wght@400;700&family=Roboto:wght@400;700&family=Montserrat:wght@400;700&family=Oswald:wght@400;700&family=Playfair+Display:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <!-- Mobile Re-Direct -->
+    <script>
+        if (window.innerWidth <= 768) {
+            window.location.href = "configurator_mobile.html";
+        }
+    </script>
+    
+    <!-- Three.js Library and Plugins directly from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/DecalGeometry.js"></script>
+    
+    <!-- Fabric.js for the interactive 2D Decal projection surface -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/mobile.css" media="(max-width: 768px)">
+    <style>
+        body.studio-page { overflow-x: hidden; color-scheme: light; }
+        footer { display: none; }
+        .ci-layout {
+            grid-template-columns: minmax(260px, 400px) minmax(0, 1fr) minmax(260px, 350px);
+        }
+        main.ci-layout {
+            flex: 1 1 auto;
+            min-height: 0;
+            align-items: stretch;
+        }
+        .ci-sidebar.ci-right {
+            position: relative;
+            z-index: 2;
+            background-color: var(--bg-color);
+            min-width: 0;
+        }
+        .ci-right .brutal-box {
+            background: #fff !important;
+            color: var(--text-color);
+        }
+        #webgl-container {
+            min-height: 280px;
+            height: min(62vh, 720px) !important;
+            max-height: 720px;
+        }
+    </style>
+</head>
+<body class="studio-page" style="height: 100vh; display: flex; flex-direction: column;">
+<div class="portfolio-ribbon">PORTFOLIO SAMPLE</div>
+
+<header>
+    <div class="nav-container" style="max-width: 100%;">
+        <a href="index.php" class="logo" style="font-weight:900; font-size:1.2rem; text-decoration:none; color:var(--text-color); background:var(--accent-1); padding:0.3rem 0.8rem; border:var(--border-width) solid var(--border-color); box-shadow:4px 4px 0px var(--border-color);">PORTFOLIO SAMPLE</a>
+        <nav id="site-nav" class="site-nav">
+            <ul style="margin: 0; padding: 0;">
+                <li><a href="configurator.php"><strong>3D STUDIO</strong></a></li>
+                <li><a href="index.php">SHOP</a></li>
+                <li><a href="contact.php">CONTACT</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <div class="cart-icon">
+                <span style="font-size: 2rem;">🛒</span>
+                <span class="cart-badge" id="cart-badge">0</span>
+            </div>
+            <button type="button" class="nav-toggle" id="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Odpri meni">
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main class="ci-layout studio-main">
+    <!-- LEFT SIDEBAR: Tools -->
+    <aside class="ci-sidebar ci-left" style="border-right: var(--border-width) solid var(--border-color); display: flex; flex-direction: column; overflow-y: auto;">
+        
+        <h2 style="padding: 1rem; border-bottom: var(--border-width) solid var(--border-color); margin:0;">LAYER CONTROLS</h2>
+        
+        <div style="padding: 1.5rem; border-bottom: var(--border-width) solid var(--border-color); background: #fafafa;">
+            <!-- FabricJS Spawn Controls -->
+            <button id="add-text-btn" class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem; font-size: 1rem;">+ ADD TEXT LAYER</button>
+            <div style="position: relative; box-sizing: border-box;">
+                <!-- Hide file input cleanly -->
+                <input type="file" id="image-upload" accept="image/png, image/jpeg" style="position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; top:0; left:0;">
+                <button class="btn btn-secondary" style="width: 100%; font-size: 1rem; pointer-events: none;">+ UPLOAD GRAPHIC</button>
+            </div>
+            
+            <!-- Font Utility (dynamically controls active text layer) -->
+            <label style="margin-top: 1.5rem; display: block; font-weight: bold;">Font Family (Active Layer)</label>
+                <select id="font-family" class="form-input">
+                    <option value="Space Grotesk">Space Grotesk</option>
+                    <option value="Courier Prime">Courier New</option>
+                    <option value="Impact">Impact</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Oswald">Oswald</option>
+                    <option value="Playfair Display">Playfair</option>
+                    <option value="Bebas Neue">Bebas Neue</option>
+                </select>
+
+            <label style="margin-top: 1.5rem; display: block; font-weight: bold;">Text color (each layer)</label>
+            <p style="font-size: 0.75rem; color: #666; margin: 0 0 0.5rem 0;">Each text layer has its own color picker.</p>
+            <div id="text-layers-colors" style="display: flex; flex-direction: column; gap: 0.35rem;"></div>
+
+            <!-- Positioning Utilities -->
+            <label style="margin-top: 1.5rem; display: block; font-weight: bold;">Align Horizontal (Active Layer)</label>
+            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                <button id="pos-left-btn" class="btn" style="flex:1; padding: 0.5rem; font-size: 0.8rem; background: #e0e0e0; color: #000; border: 1px solid #ccc;">LEFT</button>
+                <button id="pos-hcenter-btn" class="btn" style="flex:1; padding: 0.5rem; font-size: 0.8rem; background: #e0e0e0; color: #000; border: 1px solid #ccc;">CENTER</button>
+                <button id="pos-right-btn" class="btn" style="flex:1; padding: 0.5rem; font-size: 0.8rem; background: #e0e0e0; color: #000; border: 1px solid #ccc;">RIGHT</button>
+            </div>
+
+            <label style="margin-top: 1rem; display: block; font-weight: bold;">Align Vertical (Active Layer)</label>
+            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                <button id="pos-top-btn" class="btn" style="flex:1; padding: 0.5rem; font-size: 0.8rem; background: #e0e0e0; color: #000; border: 1px solid #ccc;">TOP</button>
+                <button id="pos-vcenter-btn" class="btn" style="flex:1; padding: 0.5rem; font-size: 0.8rem; background: #e0e0e0; color: #000; border: 1px solid #ccc;">MIDDLE</button>
+                <button id="pos-bot-btn" class="btn" style="flex:1; padding: 0.5rem; font-size: 0.8rem; background: #e0e0e0; color: #000; border: 1px solid #ccc;">BOTTOM</button>
+            </div>
+        </div>
+
+        <!-- The Interactive 2D Map -->
+        <div style="padding: 1.5rem; flex-grow: 1; display:flex; flex-direction: column; align-items:center;">
+            
+            <!-- Dual View Switcher -->
+            <div style="display: flex; gap: 0.5rem; width: 100%; margin-bottom: 1rem;">
+                <button id="view-front-btn" class="btn" style="flex:1; padding: 0.5rem; font-size: 1rem; background: var(--accent-3);">FRONT</button>
+                <button id="view-back-btn" class="btn" style="flex:1; padding: 0.5rem; font-size: 1rem; background: #fff;">BACK</button>
+            </div>
+
+            <div class="studio-colors-inline" style="width: 100%; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: var(--border-width) dashed #ccc;">
+                <label style="font-weight: bold; display: block; margin-bottom: 0.5rem;">SHIRT COLOR</label>
+                <div class="color-options" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem;">
+                    <button type="button" class="color-btn active" data-hex="#ffffff" style="background-color: #ffffff; width:100%;" title="White"></button>
+                    <button type="button" class="color-btn" data-hex="#121212" style="background-color: #121212; width:100%;" title="Black"></button>
+                    <button type="button" class="color-btn" data-hex="#36454F" style="background-color: #36454F; width:100%;" title="Charcoal"></button>
+                    <button type="button" class="color-btn" data-hex="#9e9e9e" style="background-color: #9e9e9e; width:100%;" title="Heather Grey"></button>
+                    <button type="button" class="color-btn" data-hex="#000080" style="background-color: #000080; width:100%;" title="Navy"></button>
+                    <button type="button" class="color-btn" data-hex="#4169E1" style="background-color: #4169E1; width:100%;" title="Royal Blue"></button>
+                    <button type="button" class="color-btn" data-hex="#ADD8E6" style="background-color: #ADD8E6; width:100%;" title="Light Blue"></button>
+                    <button type="button" class="color-btn" data-hex="#228B22" style="background-color: #228B22; width:100%;" title="Forest Green"></button>
+                    <button type="button" class="color-btn" data-hex="#808000" style="background-color: #808000; width:100%;" title="Olive"></button>
+                    <button type="button" class="color-btn" data-hex="#98FF98" style="background-color: #98FF98; width:100%;" title="Mint"></button>
+                    <button type="button" class="color-btn" data-hex="#DC143C" style="background-color: #DC143C; width:100%;" title="Crimson Red"></button>
+                    <button type="button" class="color-btn" data-hex="#800000" style="background-color: #800000; width:100%;" title="Maroon"></button>
+                    <button type="button" class="color-btn" data-hex="#FFDB58" style="background-color: #FFDB58; width:100%;" title="Mustard Yellow"></button>
+                    <button type="button" class="color-btn" data-hex="#FFE5B4" style="background-color: #FFE5B4; width:100%;" title="Peach"></button>
+                    <button type="button" class="color-btn" data-hex="#FFB6C1" style="background-color: #FFB6C1; width:100%;" title="Soft Pink"></button>
+                </div>
+            </div>
+            
+            <p style="font-size: 0.8rem; font-weight: bold; margin-bottom: 0.5rem; color: #555;">2D DESIGN MINIMAP</p>
+            
+            <!-- Minimap Front -->
+            <div id="map-wrapper-front" style="border: 2px dashed #bbb; padding: 2px; background-color: #fff; width: 300px; height: 385px; margin: 0 auto; display: block;">
+                <canvas id="design-minimap-front"></canvas>
+            </div>
+            
+            <!-- Minimap Back -->
+            <div id="map-wrapper-back" style="border: 2px dashed #bbb; padding: 2px; background-color: #fff; width: 300px; height: 385px; margin: 0 auto; display: none;">
+                <canvas id="design-minimap-back"></canvas>
+            </div>
+            
+            <button id="delete-layer-btn" style="margin-top: 1rem; width:100%; background: #DC143C; color: #fff; padding: 0.75rem; border: var(--border-width) solid var(--border-color); font-weight: bold; cursor: pointer;">DELETE ACTIVE LAYER</button>
+            <button id="save-tshirt-btn" class="btn btn-secondary" style="margin-top: 0.5rem; width:100%; padding: 0.75rem; font-weight: bold; background: var(--accent-3);">💾 SAVE SHIRT IMAGE</button>
+        </div>
+    </aside>
+
+    <!-- CENTER CANVAS: The 3D Stage -->
+    <section class="ci-canvas-area" style="position: relative; padding: 2rem;">
+        
+        <!-- The Product Container for WebGL -->
+        <div id="webgl-container" style="position: relative; width: 100%; background-color: #ffffff; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow); margin: 0 auto; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            
+            <div id="nelti-loader">
+                <div class="loader-box">
+                    <h2>Portfolio Sample Loading...</h2>
+                    <p style="font-weight: bold; font-size: 1.2rem;">[Portfolio Demo]</p>
+                    <div class="loader-progress">
+                        <div class="loader-bar" id="loader-bar"></div>
+                    </div>
+                    <p id="loader-msg" style="margin-top: 1rem; font-weight: bold;">0%</p>
+                </div>
+            </div>
+
+            <!-- Three.js will inject its <canvas> dynamically here -->
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem; font-weight: bold; font-size: 1.2rem;">
+            DRAG TO ROTATE &bull; SCROLL TO ZOOM
+        </div>
+    </section>
+
+    <!-- RIGHT SIDEBAR: Product Config -->
+    <aside class="ci-sidebar ci-right" style="border-left: var(--border-width) solid var(--border-color);">
+        <div class="brutal-box studio-product-panel" style="padding: 2rem;">
+            <h2>Premium Blank 3D</h2>
+            <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0; color: var(--accent-2);">$ 45.00</p>
+            
+            <div style="margin-bottom: 2rem;">
+                <label style="font-weight: bold; display: block; margin-bottom: 0.5rem;">SHIRT COLOR</label>
+                <!-- Expanded Color Palette for 3D Material Mapping -->
+                <div class="color-options" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem;">
+                    <!-- Row 1 -->
+                    <button class="color-btn active" data-hex="#ffffff" style="background-color: #ffffff; width:100%;" title="White"></button>
+                    <button class="color-btn" data-hex="#121212" style="background-color: #121212; width:100%;" title="Black"></button>
+                    <button class="color-btn" data-hex="#36454F" style="background-color: #36454F; width:100%;" title="Charcoal"></button>
+                    <button class="color-btn" data-hex="#9e9e9e" style="background-color: #9e9e9e; width:100%;" title="Heather Grey"></button>
+                    <button class="color-btn" data-hex="#000080" style="background-color: #000080; width:100%;" title="Navy"></button>
+                    <!-- Row 2 -->
+                    <button class="color-btn" data-hex="#4169E1" style="background-color: #4169E1; width:100%;" title="Royal Blue"></button>
+                    <button class="color-btn" data-hex="#ADD8E6" style="background-color: #ADD8E6; width:100%;" title="Light Blue"></button>
+                    <button class="color-btn" data-hex="#228B22" style="background-color: #228B22; width:100%;" title="Forest Green"></button>
+                    <button class="color-btn" data-hex="#808000" style="background-color: #808000; width:100%;" title="Olive"></button>
+                    <button class="color-btn" data-hex="#98FF98" style="background-color: #98FF98; width:100%;" title="Mint"></button>
+                    <!-- Row 3 -->
+                    <button class="color-btn" data-hex="#DC143C" style="background-color: #DC143C; width:100%;" title="Crimson Red"></button>
+                    <button class="color-btn" data-hex="#800000" style="background-color: #800000; width:100%;" title="Maroon"></button>
+                    <button class="color-btn" data-hex="#FFDB58" style="background-color: #FFDB58; width:100%;" title="Mustard Yellow"></button>
+                    <button class="color-btn" data-hex="#FFE5B4" style="background-color: #FFE5B4; width:100%;" title="Peach"></button>
+                    <button class="color-btn" data-hex="#FFB6C1" style="background-color: #FFB6C1; width:100%;" title="Soft Pink"></button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <label style="font-weight: bold; display: block; margin-bottom: 0.5rem;">SIZE</label>
+                <div class="size-options">
+                    <button class="size-btn" data-size="S" style="padding: 0.5rem 1rem;">S</button>
+                    <button class="size-btn active" data-size="M" style="padding: 0.5rem 1rem;">M</button>
+                    <button class="size-btn" data-size="L" style="padding: 0.5rem 1rem;">L</button>
+                    <button class="size-btn" data-size="XL" style="padding: 0.5rem 1rem;">XL</button>
+                </div>
+            </div>
+
+            <button id="add-to-cart-config" class="btn btn-secondary" style="width: 100%; font-size: 1.5rem; padding: 1.5rem;">ADD TO CART</button>
+        </div>
+    </aside>
+</main>
+
+<style>
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+</style>
+
+<div id="toast-container"></div>
+<script src="assets/js/configurator.js"></script>
+<script src="app.js"></script>
+<script src="assets/js/mobile-nav.js" defer></script>
+</body>
+</html>

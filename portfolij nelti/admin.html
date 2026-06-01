@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Admin - Portfolio Sample</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/mobile.css" media="(max-width: 768px)">
+</head>
+<body id="admin-body" style="background-color: var(--accent-2);">
+<div class="portfolio-ribbon">PORTFOLIO SAMPLE</div>
+<div id="toast-container"></div>
+
+<div id="admin-login-view" class="auth-wrapper">
+    <div class="auth-form brutal-box">
+        <h1 style="margin-bottom: 2rem; text-align: center;">ADMIN<br>ACCESS</h1>
+        <div id="login-error" style="display: none; background: var(--text-color); color: var(--accent-2); padding: 1rem; border: var(--border-width) solid var(--border-color); font-weight: bold; margin-bottom: 2rem; text-align: center;"></div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-input" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-input" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">LOGIN</button>
+        </form>
+        <div style="margin-top: 2rem; text-align: center;">
+            <a href="index.html" style="color: var(--text-color); font-weight: bold;">&larr; BACK TO SITE</a>
+        </div>
+    </div>
+</div>
+
+<div id="admin-dashboard-view" style="display: none;">
+    <header class="admin-top-header" style="background: var(--text-color); color: #fff;">
+        <div class="nav-container">
+            <div class="logo" style="background: #fff; color: var(--text-color); font-weight:900; padding:0.3rem 0.8rem; border:var(--border-width) solid var(--border-color);">PORTFOLIO SYS</div>
+            <nav id="site-nav" class="site-nav">
+                <ul>
+                    <li><a href="index.html" style="color: #fff;">LIVE SITE</a></li>
+                    <li><a href="#" id="logout-link" style="color: var(--accent-2);">LOGOUT</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <button type="button" class="nav-toggle" id="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Odpri meni">
+                    <span class="nav-toggle-bar" aria-hidden="true"></span>
+                    <span class="nav-toggle-bar" aria-hidden="true"></span>
+                    <span class="nav-toggle-bar" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-dashboard">
+        <div class="admin-header">
+            <h2>DASHBOARD</h2>
+            <div>
+                <span id="success-banner" style="display: none; background: var(--accent-3); color: var(--text-color); padding: 0.5rem 1rem; font-weight: bold; border: 2px solid var(--border-color); margin-right: 1rem;"></span>
+                <button type="button" class="btn btn-secondary">SYSTEM DIAGNOSTICS</button>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="brutal-box" style="padding: 2rem;">
+                <h3>ADD PRODUCT</h3>
+                <form id="add-product-form" style="margin-top: 1.5rem;">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="title" class="form-input" placeholder="Product Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="number" name="price" class="form-input" placeholder="45.00" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" name="description" class="form-input" placeholder="Short description" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Image</label>
+                        <input type="file" name="image" class="form-input" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn">SAVE PRODUCT</button>
+                </form>
+            </div>
+
+            <div class="brutal-box" style="padding: 2rem; background-color: var(--accent-1);">
+                <h3>MANAGE PRODUCTS</h3>
+                <div id="product-list" style="margin-top: 1.5rem; max-height: 400px; overflow-y: auto;"></div>
+            </div>
+
+            <div class="brutal-box" style="padding: 2rem; background-color: var(--accent-3);">
+                <h3>DISCOUNT CODES</h3>
+                <form style="margin-top: 1.5rem;" onsubmit="event.preventDefault(); alert('Code Generated!');">
+                    <div class="form-group">
+                        <label>Code Name</label>
+                        <input type="text" class="form-input" placeholder="e.g., DROP20">
+                    </div>
+                    <div class="form-group">
+                        <label>Discount %</label>
+                        <input type="number" class="form-input" placeholder="20">
+                    </div>
+                    <button type="submit" class="btn btn-secondary">GENERATE</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer style="margin-top: auto;">
+        <div class="footer-bottom" style="background: var(--text-color); color: #fff; padding: 2rem; border-top: var(--border-width) solid var(--border-color);">
+            &copy; <span id="admin-year"></span> Portfolio Sample Admin. SYSTEM SECURE.
+        </div>
+    </footer>
+</div>
+
+<script src="app.js"></script>
+<script src="assets/js/mobile-nav.js" defer></script>
+<script>
+(function () {
+    const loginView = document.getElementById('admin-login-view');
+    const dashView = document.getElementById('admin-dashboard-view');
+    const adminBody = document.getElementById('admin-body');
+    const loginError = document.getElementById('login-error');
+    const productList = document.getElementById('product-list');
+    const successBanner = document.getElementById('success-banner');
+    document.getElementById('admin-year').textContent = new Date().getFullYear();
+
+    function esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    }
+
+    function showLogin() {
+        loginView.style.display = '';
+        dashView.style.display = 'none';
+        adminBody.style.backgroundColor = 'var(--accent-2)';
+    }
+
+    function showDashboard(msg) {
+        loginView.style.display = 'none';
+        dashView.style.display = 'block';
+        adminBody.style.backgroundColor = 'var(--bg-color)';
+        if (msg) {
+            successBanner.textContent = msg;
+            successBanner.style.display = 'inline-block';
+            setTimeout(() => { successBanner.style.display = 'none'; }, 5000);
+        }
+        if (typeof window.showToast === 'function' && msg && msg.includes('ADDED')) {
+            window.showToast('Success: Product added to Demo Catalog', 'success');
+        }
+    }
+
+    async function loadProducts() {
+        const r = await fetch('/api/admin/products', { credentials: 'same-origin' });
+        if (r.status === 401) {
+            showLogin();
+            return;
+        }
+        const products = await r.json();
+        if (!products.length) {
+            productList.innerHTML = '<p style="padding: 1rem; font-weight: bold;">No products in database.</p>';
+            return;
+        }
+        productList.innerHTML = products.map((p) => `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 2px dashed var(--border-color); background: #fff; margin-bottom: 0.5rem; border: 2px solid var(--border-color);">
+                <div>
+                    <strong style="display:block;">${esc(p.title)}</strong>
+                    <span style="font-size:0.8rem; color: #555;">ID: ${esc(p.id)}</span>
+                </div>
+                <button type="button" class="btn btn-secondary delete-product-btn" data-id="${esc(p.id)}" style="padding: 0.5rem 1rem; font-size: 0.8rem; background: #ff4d4d; color: #fff;">DELETE</button>
+            </div>
+        `).join('');
+    }
+
+    productList?.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.delete-product-btn');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        if (!confirm('Delete this item?')) return;
+        const r = await fetch('/api/admin/products/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ product_id: id }),
+            credentials: 'same-origin',
+        });
+        const data = await r.json();
+        if (data.ok) {
+            showDashboard('PRODUCT DELETED');
+            loadProducts();
+        }
+    });
+
+    document.getElementById('add-product-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const fd = new FormData(form);
+        const r = await fetch('/api/admin/products', { method: 'POST', body: fd, credentials: 'same-origin' });
+        const data = await r.json();
+        if (r.status === 401) {
+            showLogin();
+            return;
+        }
+        if (data.ok) {
+            form.reset();
+            showDashboard(data.message || 'PRODUCT ADDED');
+            loadProducts();
+        }
+    });
+
+    document.getElementById('login-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loginError.style.display = 'none';
+        const fd = new FormData(e.target);
+        const body = new URLSearchParams(fd);
+        const r = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body,
+            credentials: 'same-origin',
+        });
+        const data = await r.json();
+        if (data.ok) {
+            showDashboard();
+            loadProducts();
+        } else {
+            loginError.textContent = data.error || 'INVALID CREDENTIALS';
+            loginError.style.display = 'block';
+        }
+    });
+
+    document.getElementById('logout-link')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+        showLogin();
+    });
+
+    fetch('/api/admin/me', { credentials: 'same-origin' })
+        .then((r) => r.json())
+        .then((d) => {
+            if (d.authenticated) {
+                showDashboard();
+                loadProducts();
+            } else {
+                showLogin();
+            }
+        })
+        .catch(() => showLogin());
+})();
+</script>
+</body>
+</html>

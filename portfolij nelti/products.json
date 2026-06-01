@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1",
+        "title": "Star Burst Black",
+        "price": "45.00",
+        "description": "Bold neo-brutalist graphic design with a giant pink star by NeLTi.",
+        "image": "assets\/img\/product_1.png"
+    },
+    {
+        "id": "2",
+        "title": "Geo Mess White",
+        "price": "45.00",
+        "description": "Messy, sharp-edged abstract geometric design on a white tee.",
+        "image": "assets\/img\/product_2.png"
+    },
+    {
+        "id": "69dcaf9c9471d",
+        "title": "Luka",
+        "price": "180.33",
+        "description": "TMNT for every fan its ready",
+        "image": "uploads\/1776070556_tmnt.png"
+    }
+]

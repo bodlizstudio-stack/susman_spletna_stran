@@ -1,0 +1,31 @@
+{
+  "plugins": {
+    "clerk": {
+      "enabled": true
+    },
+    "sentry": {
+      "enabled": true
+    },
+    "stripe": {
+      "enabled": true
+    },
+    "vercel": {
+      "enabled": true
+    },
+    "supabase": {
+      "enabled": true
+    },
+    "firecrawl": {
+      "enabled": true
+    },
+    "posthog": {
+      "enabled": true
+    },
+    "langfuse": {
+      "enabled": true
+    },
+    "context7-plugin": {
+      "enabled": true
+    }
+  }
+}
