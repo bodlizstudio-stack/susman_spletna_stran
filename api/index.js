@@ -1,5 +1,6 @@
 /**
  * Root Server serving beautiful Landing Page at / and Nelti Portfolij + APIs on port 5000
+ * Serves as Vercel Serverless Function in /api/index.js
  */
 const path = require('path');
 const fs = require('fs').promises;
@@ -7,7 +8,8 @@ const express = require('express');
 const session = require('express-session');
 const multer = require('multer');
 
-const ROOT = __dirname;
+// Root is one level up because index.js is inside the /api/ folder
+const ROOT = path.join(__dirname, '..');
 const NELTI_ROOT = path.join(ROOT, 'portfolij nelti');
 const PORT = Number(process.env.PORT) || 5000;
 

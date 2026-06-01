@@ -2,10 +2,10 @@
   "name": "goba-main-portfolio",
   "version": "1.0.0",
   "description": "Premium portfolio landing page and Nelti shop on port 5000",
-  "main": "server.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node api/index.js",
+    "dev": "node api/index.js"
   },
   "dependencies": {
     "express": "^4.21.2",
