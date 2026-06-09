@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="sl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#A5D1E8" />
+  <meta name="description" content="Ogrevanje in vodovod PRO-S — toplotne črpalke, talno ogrevanje in vodovodne inštalacije z montažo po vsej Sloveniji." />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
+  <link rel="shortcut icon" href="favicon.png" />
+  <title>Ogrevanje in vodovod | PRO-S</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#A5D1E8', 'blue-dark': '#5BA3C9', 'blue-deep': '#3B82B5',
+              'blue-soft': '#E8F4FA', black: '#0a0a0a', ink: '#1a1d23',
+            },
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          animation: { 'fade-up': 'fadeUp 0.8s ease-out' },
+          keyframes: {
+            fadeUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    html, body { -webkit-tap-highlight-color: transparent; }
+    body { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+    .mesh-bg {
+      background-color: #fbfdff;
+      background-image:
+        radial-gradient(at 12% 20%, rgba(165, 209, 232, 0.45) 0px, transparent 50%),
+        radial-gradient(at 88% 10%, rgba(165, 209, 232, 0.30) 0px, transparent 45%);
+    }
+    .dot-grid { background-image: radial-gradient(rgba(10,10,10,0.07) 1px, transparent 1px); background-size: 22px 22px; }
+    .glass { background: rgba(255,255,255,0.9); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); }
+    .lift { transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s, border-color 0.35s; }
+    .lift:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -16px rgba(59,130,181,0.25); }
+    .scroll-reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1), transform 0.65s cubic-bezier(0.4,0,0.2,1); }
+    .scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { .scroll-reveal { opacity: 1; transform: none; transition: none; } }
+    .nav-dropdown:hover .dropdown-menu, .nav-dropdown:focus-within .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(8px); transition: all 0.2s ease; }
+    .pt-safe { padding-top: env(safe-area-inset-top); }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  </style>
+</head>
+<body class="font-sans text-brand-ink bg-white antialiased">
+
+  <!-- HEADER -->
+  <header class="fixed top-0 inset-x-0 z-50 glass border-b border-gray-100 pt-safe">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <a href="index.html" class="shrink-0" aria-label="PRO-S domov">
+          <img src="logo.png" alt="PRO-S — Klimatizacija, Ogrevanje, Prezračevanje" class="h-9 sm:h-11 md:h-12 w-auto max-w-[11rem] sm:max-w-none" width="1320" height="625" />
+        </a>
+        <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold">
+          <a href="index.html" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Domov</a>
+          <div class="nav-dropdown relative">
+            <button type="button" class="flex items-center gap-1 text-gray-700 hover:text-brand-blue-deep transition-colors">
+              Ponudba
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute left-0 top-full pt-3 w-60">
+              <div class="bg-white rounded-2xl shadow-xl shadow-brand-blue/20 border border-gray-100 p-2">
+                <a href="klimatske-naprave.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-brand-blue-soft text-gray-700 hover:text-brand-blue-deep font-semibold transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+                  Klimatske naprave
+                </a>
+                <a href="prezracevanje.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-brand-blue-soft text-gray-700 hover:text-brand-blue-deep font-semibold transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8h13a3 3 0 100-6 3 3 0 00-3 3M3 16h10a3 3 0 110 6 3 3 0 01-3-3M3 12h17a3 3 0 100-6"/></svg>
+                  Prezračevanje
+                </a>
+              </div>
+            </div>
+          </div>
+          <a href="index.html#storitve" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Storitve</a>
+          <a href="galerija.html" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Galerija</a>
+          <a href="index.html#kontakt" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Kontakt</a>
+        </nav>
+        <a href="index.html#kontakt" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-all">
+          Kontaktirajte nas
+        </a>
+        <button id="menu-btn" type="button" class="md:hidden p-2.5 -mr-2 rounded-xl hover:bg-gray-100" aria-label="Meni" aria-expanded="false">
+          <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-1 text-base font-semibold">
+      <a href="index.html" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Domov</a>
+      <a href="klimatske-naprave.html" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Klimatske naprave</a>
+      <a href="prezracevanje.html" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Prezračevanje</a>
+      <a href="index.html#storitve" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Storitve</a>
+      <a href="galerija.html" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Galerija</a>
+      <a href="index.html#kontakt" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Kontakt</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- INTRO -->
+    <section class="relative pt-28 sm:pt-32 pb-10 md:pb-12 mesh-bg overflow-hidden border-b border-gray-100/80">
+      <div class="absolute inset-0 dot-grid opacity-40 pointer-events-none"></div>
+      <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-up">
+        <nav class="flex items-center justify-center gap-2 text-xs text-gray-500 mb-5">
+          <a href="index.html" class="hover:text-brand-blue-deep">Domov</a><span>/</span>
+          <span class="text-brand-black font-semibold">Ogrevanje in vodovod</span>
+        </nav>
+        <p class="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-bold uppercase tracking-wider bg-brand-blue/30 text-brand-blue-deep rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-blue-deep"></span> Ogrevanje · Vodovod
+        </p>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-brand-black mb-5">
+          Ogrevanje in vodovodne inštalacije
+        </h1>
+        <p class="text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
+          Poleg klimatizacije in prezračevanja pri PRO-S izvajamo tudi <strong class="text-brand-black">ogrevalne sisteme</strong>
+          in <strong class="text-brand-black">vodovodne inštalacije</strong> — od toplotnih črpalk in talnega ogrevanja do
+          sanitarne vode in kopalniških inštalacij. Poskrbimo za svetovanje, montažo in vzdrževanje na enem mestu.
+        </p>
+      </div>
+    </section>
+
+    <!-- STORITVE -->
+    <section class="relative py-12 md:py-16 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid sm:grid-cols-2 gap-6 lg:gap-8">
+          <div class="scroll-reveal lift relative p-8 rounded-2xl bg-gradient-to-br from-brand-blue-soft to-white border border-gray-100 overflow-hidden group">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-blue/30 rounded-full blur-2xl group-hover:bg-brand-blue/50 transition-colors"></div>
+            <div class="relative w-16 h-16 mb-5 rounded-2xl bg-brand-black text-brand-blue flex items-center justify-center shadow-lg">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>
+            </div>
+            <h2 class="relative text-xl font-bold mb-2">Ogrevanje</h2>
+            <p class="relative text-sm text-gray-600 mb-4">Toplotne črpalke (zrak–voda), talno in radiatorsko ogrevanje, zamenjava starih sistemov ter redno vzdrževanje za nižje stroške.</p>
+            <ul class="relative text-sm text-gray-600 space-y-2">
+              <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-blue-deep"></span>Toplotne črpalke zrak–voda</li>
+              <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-blue-deep"></span>Talno ogrevanje</li>
+              <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-blue-deep"></span>Sanacija ogrevalnih sistemov</li>
+            </ul>
+          </div>
+
+          <div class="scroll-reveal lift relative p-8 rounded-2xl bg-gradient-to-br from-brand-blue-soft to-white border border-gray-100 overflow-hidden group" style="transition-delay: 100ms">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-blue/30 rounded-full blur-2xl group-hover:bg-brand-blue/50 transition-colors"></div>
+            <div class="relative w-16 h-16 mb-5 rounded-2xl bg-brand-black text-brand-blue flex items-center justify-center shadow-lg">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1.5M12 21a6 6 0 006-6c0-4-6-10.5-6-10.5S6 11 6 15a6 6 0 006 6z"/></svg>
+            </div>
+            <h2 class="relative text-xl font-bold mb-2">Vodovod</h2>
+            <p class="relative text-sm text-gray-600 mb-4">Vodovodne inštalacije za nove in obnovljene objekte, sanitarna voda, kopalnice ter odprava puščanj in okvar.</p>
+            <ul class="relative text-sm text-gray-600 space-y-2">
+              <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-blue-deep"></span>Vodovodne inštalacije</li>
+              <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-blue-deep"></span>Kopalnice in sanitarna oprema</li>
+              <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-blue-deep"></span>Odprava puščanj in okvar</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="relative py-14 bg-gradient-to-br from-brand-blue-soft to-white border-t border-gray-100">
+      <div class="max-w-3xl mx-auto px-4 text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-black mb-3">Načrtujete ogrevanje ali vodovod?</h2>
+        <p class="text-gray-600 mb-6">Opišite svoj projekt v povpraševanju — svetujemo vam in pripravimo neobvezujočo ponudbo.</p>
+        <a href="index.html?kategorija=ogrevanje#kontakt" class="inline-flex items-center gap-2 px-7 py-4 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-all shadow-lg shadow-brand-blue/30">
+          Pošlji povpraševanje
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-100 bg-gray-50 pb-safe">
+    <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <a href="index.html" class="inline-flex items-center gap-2 font-semibold text-brand-black hover:text-brand-blue-deep">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Nazaj na domov
+      </a>
+      <p>&copy; <span id="year"></span> PRO-S · Hlajenje · Ogrevanje · Prezračevanje</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+    menuBtn.addEventListener('click', () => {
+      const hidden = mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!hidden));
+      iconOpen.classList.toggle('hidden', !hidden);
+      iconClose.classList.toggle('hidden', hidden);
+    });
+  </script>
+  <script src="scroll-reveal.js"></script>
+  <script>initScrollReveal();</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="sl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#A5D1E8" />
+  <meta name="description" content="Podrobnosti naprave in izračun cene z montažo ali brez — PRO-S." />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
+  <link rel="shortcut icon" href="favicon.png" />
+  <title>Naprava | PRO-S</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#A5D1E8', 'blue-dark': '#5BA3C9', 'blue-deep': '#3B82B5',
+              'blue-soft': '#E8F4FA', black: '#0a0a0a', ink: '#1a1d23',
+            },
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          animation: { 'fade-up': 'fadeUp 0.8s ease-out' },
+          keyframes: {
+            fadeUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    html, body { -webkit-tap-highlight-color: transparent; }
+    body { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+    .mesh-bg {
+      background-color: #fbfdff;
+      background-image:
+        radial-gradient(at 12% 20%, rgba(165, 209, 232, 0.45) 0px, transparent 50%),
+        radial-gradient(at 88% 10%, rgba(165, 209, 232, 0.30) 0px, transparent 45%);
+    }
+    .dot-grid { background-image: radial-gradient(rgba(10,10,10,0.07) 1px, transparent 1px); background-size: 22px 22px; }
+    .glass { background: rgba(255,255,255,0.9); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); }
+    .airflow-line { stroke-dasharray: 6 8; animation: dash 3s linear infinite; }
+    @keyframes dash { to { stroke-dashoffset: -100; } }
+    .nav-dropdown:hover .dropdown-menu, .nav-dropdown:focus-within .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu { opacity: 0; visibility: hidden; transform: translateY(8px); transition: all 0.2s ease; }
+    /* Izbrana storitev (radio) – poudarjeno polje */
+    .service-option { transition: all 0.2s ease; }
+    .service-option:has(input:checked) {
+      border-color: #3B82B5;
+      background-color: #E8F4FA;
+      box-shadow: 0 0 0 3px rgba(91,163,201,0.25);
+    }
+    .pt-safe { padding-top: env(safe-area-inset-top); }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  </style>
+</head>
+<body class="font-sans text-brand-ink bg-white antialiased">
+
+  <!-- HEADER -->
+  <header class="fixed top-0 inset-x-0 z-50 glass border-b border-gray-100 pt-safe">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <a href="index.html" class="shrink-0" aria-label="PRO-S domov">
+          <img src="logo.png" alt="PRO-S — Klimatizacija, Ogrevanje, Prezračevanje" class="h-9 sm:h-11 md:h-12 w-auto max-w-[11rem] sm:max-w-none" width="1320" height="625" />
+        </a>
+        <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-semibold">
+          <a href="index.html" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Domov</a>
+          <div class="nav-dropdown relative">
+            <button type="button" class="flex items-center gap-1 text-gray-700 hover:text-brand-blue-deep transition-colors">
+              Ponudba
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute left-0 top-full pt-3 w-60">
+              <div class="bg-white rounded-2xl shadow-xl shadow-brand-blue/20 border border-gray-100 p-2">
+                <a href="klimatske-naprave.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-brand-blue-soft text-gray-700 hover:text-brand-blue-deep font-semibold transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+                  Klimatske naprave
+                </a>
+                <a href="prezracevanje.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-brand-blue-soft text-gray-700 hover:text-brand-blue-deep font-semibold transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8h13a3 3 0 100-6 3 3 0 00-3 3M3 16h10a3 3 0 110 6 3 3 0 01-3-3M3 12h17a3 3 0 100-6"/></svg>
+                  Prezračevanje
+                </a>
+              </div>
+            </div>
+          </div>
+          <a href="index.html#storitve" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Storitve</a>
+          <a href="galerija.html" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Galerija</a>
+          <a href="index.html#kontakt" class="text-gray-700 hover:text-brand-blue-deep transition-colors">Kontakt</a>
+        </nav>
+        <a href="index.html#kontakt" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-all">
+          Kontaktirajte nas
+        </a>
+        <button id="menu-btn" type="button" class="md:hidden p-2.5 -mr-2 rounded-xl hover:bg-gray-100" aria-label="Meni" aria-expanded="false">
+          <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-1 text-base font-semibold">
+      <a href="index.html" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Domov</a>
+      <a href="klimatske-naprave.html" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Klimatske naprave</a>
+      <a href="prezracevanje.html" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Prezračevanje</a>
+      <a href="index.html#storitve" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Storitve</a>
+      <a href="galerija.html" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Galerija</a>
+      <a href="index.html#kontakt" class="px-3 py-3 rounded-lg hover:bg-brand-blue-soft">Kontakt</a>
+    </div>
+  </header>
+
+  <main class="pt-24 sm:pt-28">
+    <div id="product-detail" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12"></div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-100 bg-gray-50 pb-safe mt-12">
+    <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <a href="index.html" class="inline-flex items-center gap-2 font-semibold text-brand-black hover:text-brand-blue-deep">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Nazaj na domov
+      </a>
+      <p>&copy; <span id="year"></span> PRO-S · Hlajenje · Ogrevanje · Prezračevanje</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+    menuBtn.addEventListener('click', () => {
+      const hidden = mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!hidden));
+      iconOpen.classList.toggle('hidden', !hidden);
+      iconClose.classList.toggle('hidden', hidden);
+    });
+  </script>
+  <script src="products.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const product = getProduct(params.get('id'));
+      const container = document.getElementById('product-detail');
+
+      if (!product) {
+        container.innerHTML = `
+          <div class="text-center py-20">
+            <h1 class="text-2xl font-extrabold text-brand-black mb-3">Naprave ni mogoče najti</h1>
+            <p class="text-gray-600 mb-6">Žal izbrana naprava ne obstaja ali povezava ni pravilna.</p>
+            <a href="klimatske-naprave.html" class="inline-flex items-center gap-2 px-6 py-3 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-all">Nazaj na ponudbo</a>
+          </div>`;
+        return;
+      }
+
+      document.title = product.brand + ' ' + product.name + ' | PRO-S';
+      const backHref = product.category === 'prezracevanje' ? 'prezracevanje.html' : 'klimatske-naprave.html';
+      const backLabel = CATEGORY_LABEL[product.category];
+
+      let wifi = 'ne';
+      const wifiBlock = product.wifiOption ? `
+              <div class="mb-5">
+                <h3 class="text-sm font-bold text-gray-700 mb-3">WiFi modul</h3>
+                <div class="grid sm:grid-cols-2 gap-3">
+                  <label class="service-option flex items-center gap-3 p-3.5 rounded-xl border-2 border-gray-200 cursor-pointer">
+                    <input type="radio" name="wifi" value="ne" class="w-5 h-5 accent-brand-blue-deep" checked />
+                    <span class="text-sm font-semibold text-brand-black">Brez WiFi</span>
+                  </label>
+                  <label class="service-option flex items-center gap-3 p-3.5 rounded-xl border-2 border-gray-200 cursor-pointer">
+                    <input type="radio" name="wifi" value="da" class="w-5 h-5 accent-brand-blue-deep" />
+                    <span class="text-sm font-semibold text-brand-black">Z WiFi <span class="block text-xs font-normal text-gray-500">+${formatEUR((product.wifiAddonNet || 0) * (1 + VAT_DEVICE))}</span></span>
+                  </label>
+                </div>
+              </div>` : '';
+
+      const featureList = product.features.map(
+        (f) => `<li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-brand-blue-deep shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-sm text-gray-700">${f}</span></li>`
+      ).join('');
+
+      const specRow = (label, value) => `
+        <div class="flex items-center justify-between py-2.5 border-b border-gray-100">
+          <span class="text-sm text-gray-500">${label}</span>
+          <span class="text-sm font-bold text-brand-black">${value}</span>
+        </div>`;
+
+      container.innerHTML = `
+        <nav class="flex items-center gap-2 text-xs text-gray-500 mb-6">
+          <a href="index.html" class="hover:text-brand-blue-deep">Domov</a><span>/</span>
+          <a href="${backHref}" class="hover:text-brand-blue-deep">${backLabel}</a><span>/</span>
+          <span class="text-brand-black font-semibold">${product.name}</span>
+        </nav>
+
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+          <!-- Slika -->
+          <div class="lg:sticky lg:top-28">
+            <div class="aspect-[4/3] rounded-3xl bg-gradient-to-br from-brand-blue-soft to-white border border-gray-100 shadow-sm flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 dot-grid opacity-30"></div>
+              ${deviceSvg(product)}
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-3">
+              <div class="text-center p-3 rounded-xl bg-white border border-gray-100">
+                <p class="text-[11px] text-gray-500">Moč</p>
+                <p class="text-sm font-extrabold text-brand-black">${product.power}</p>
+              </div>
+              <div class="text-center p-3 rounded-xl bg-white border border-gray-100">
+                <p class="text-[11px] text-gray-500">Prostor</p>
+                <p class="text-sm font-extrabold text-brand-black">${product.area}</p>
+              </div>
+              <div class="text-center p-3 rounded-xl bg-white border border-gray-100">
+                <p class="text-[11px] text-gray-500">Učinkovitost</p>
+                <p class="text-sm font-extrabold text-brand-black">${product.energy}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Podrobnosti + izračun -->
+          <div>
+            <span class="text-sm font-bold text-brand-blue-deep uppercase tracking-wider">${product.series}</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-brand-black mt-1 mb-4">${product.name}</h1>
+            <p class="text-gray-600 leading-relaxed mb-6">${product.description}</p>
+
+            <ul class="space-y-2.5 mb-8">${featureList}</ul>
+
+            <!-- IZRAČUN CENE -->
+            <div class="rounded-3xl border border-gray-100 shadow-lg shadow-brand-blue/10 p-6 sm:p-7 bg-white">
+              <h2 class="text-lg font-extrabold text-brand-black mb-1">Izberite storitev in si oglejte ceno</h2>
+              <p class="text-sm text-gray-500 mb-5">Izberite možnosti. Cene so okvirne in vključujejo DDV.</p>
+
+              ${wifiBlock}
+
+              <div class="space-y-3" id="service-options">
+                <label class="service-option flex items-start gap-4 p-4 rounded-2xl border-2 border-gray-200 cursor-pointer">
+                  <input type="radio" name="service" value="montaza" class="mt-1 w-5 h-5 accent-brand-blue-deep" checked />
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between gap-3 flex-wrap">
+                      <span class="font-bold text-brand-black">Z montažo</span>
+                      <span id="price-montaza" class="text-xl font-extrabold text-brand-blue-deep"></span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Naprava + strokovna montaža · <strong>vključen 9,5 % DDV</strong></p>
+                  </div>
+                </label>
+                <label class="service-option flex items-start gap-4 p-4 rounded-2xl border-2 border-gray-200 cursor-pointer">
+                  <input type="radio" name="service" value="brez-montaze" class="mt-1 w-5 h-5 accent-brand-blue-deep" />
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between gap-3 flex-wrap">
+                      <span class="font-bold text-brand-black">Brez montaže</span>
+                      <span id="price-brez" class="text-xl font-extrabold text-brand-black"></span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Samo dobava naprave · <strong>vključen 22 % DDV</strong></p>
+                  </div>
+                </label>
+              </div>
+
+              <div class="mt-5 flex items-center justify-between p-4 rounded-2xl bg-brand-blue-soft">
+                <div>
+                  <p class="text-xs text-gray-600">Izbrana možnost: <span id="summary-service" class="font-bold text-brand-black">Z montažo</span></p>
+                  <p id="summary-wifi" class="text-xs text-gray-500 hidden"></p>
+                  <p class="text-2xl font-extrabold text-brand-black"><span id="summary-price"></span></p>
+                </div>
+                <svg class="w-10 h-10 text-brand-blue-deep" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m-6 4h6m-6 4h4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+              </div>
+
+              <a id="inquiry-link" href="#" class="mt-5 w-full inline-flex items-center justify-center gap-2 py-4 px-6 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-colors shadow-md shadow-brand-blue/25">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                Pošlji povpraševanje
+              </a>
+              <p class="text-[11px] text-gray-400 text-center mt-2">Izbrana naprava in vrsta storitve bosta samodejno preneseni v obrazec.</p>
+            </div>
+          </div>
+        </div>`;
+
+      const summaryService = document.getElementById('summary-service');
+      const summaryWifi = document.getElementById('summary-wifi');
+      const summaryPrice = document.getElementById('summary-price');
+      const inquiryLink = document.getElementById('inquiry-link');
+      const serviceLabels = { montaza: 'Z montažo', 'brez-montaze': 'Brez montaže' };
+
+      function getWifi() {
+        const w = document.querySelector('input[name="wifi"]:checked');
+        return w ? w.value : 'ne';
+      }
+
+      function updateSelection() {
+        wifi = getWifi();
+        const p = productWithWifi(product, wifi);
+        const pInstall = priceWithInstall(p);
+        const pNoInstall = priceWithoutInstall(p);
+        document.getElementById('price-montaza').textContent = formatEUR(pInstall);
+        document.getElementById('price-brez').textContent = formatEUR(pNoInstall);
+
+        const selected = document.querySelector('input[name="service"]:checked').value;
+        const priceMap = { montaza: pInstall, 'brez-montaze': pNoInstall };
+        summaryService.textContent = serviceLabels[selected];
+        summaryPrice.textContent = formatEUR(priceMap[selected]);
+
+        if (product.wifiOption && summaryWifi) {
+          summaryWifi.textContent = wifiLabel(wifi);
+          summaryWifi.classList.remove('hidden');
+        }
+
+        let href = `index.html?device=${encodeURIComponent(product.id)}&service=${encodeURIComponent(selected)}`;
+        if (product.wifiOption) href += `&wifi=${encodeURIComponent(wifi)}`;
+        inquiryLink.href = href + '#kontakt';
+      }
+
+      document.querySelectorAll('input[name="service"], input[name="wifi"]').forEach((r) => r.addEventListener('change', updateSelection));
+      updateSelection();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "susman-spletna-stran",
+  "version": "1.0.0",
+  "description": "Spletna stran za podjetje Susman",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node dev-server.js",
+    "serve": "node dev-server.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.13"
+  }
+}

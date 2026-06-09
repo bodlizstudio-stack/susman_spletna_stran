@@ -1,0 +1,24 @@
+# Dependency directories
+node_modules/
+
+# Vercel directory
+.vercel/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Operating system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Dev-only logo processing
+process-logo.js
+logo-raw-*.png
+logo-icon.png
