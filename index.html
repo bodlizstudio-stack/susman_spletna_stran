@@ -606,6 +606,20 @@
                     class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition"></select>
                 </div>
 
+                <div id="wifi-wrap" class="hidden">
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">WiFi modul</label>
+                  <div class="grid sm:grid-cols-2 gap-3">
+                    <label class="service-option flex items-center gap-3 p-3.5 rounded-xl border-2 border-gray-200 cursor-pointer">
+                      <input type="radio" name="wifi-ui" value="ne" class="w-5 h-5 accent-brand-blue-deep" checked />
+                      <span class="text-sm font-semibold text-brand-black">Brez WiFi</span>
+                    </label>
+                    <label class="service-option flex items-center gap-3 p-3.5 rounded-xl border-2 border-gray-200 cursor-pointer">
+                      <input type="radio" name="wifi-ui" value="da" class="w-5 h-5 accent-brand-blue-deep" />
+                      <span class="text-sm font-semibold text-brand-black">Z WiFi <span class="block text-xs font-normal text-gray-500">opcijski modul</span></span>
+                    </label>
+                  </div>
+                </div>
+
                 <div id="service-wrap" class="hidden">
                   <label class="block text-sm font-semibold text-gray-700 mb-1.5">Vrsta storitve</label>
                   <div class="grid sm:grid-cols-2 gap-3">
@@ -832,6 +846,7 @@
     const categorySelect = document.getElementById('category-select');
     const deviceWrap = document.getElementById('device-wrap');
     const deviceSelect = document.getElementById('device-select');
+    const wifiWrap = document.getElementById('wifi-wrap');
     const serviceWrap = document.getElementById('service-wrap');
     const banner = document.getElementById('selected-device-banner');
 
@@ -843,12 +858,47 @@
       document.querySelectorAll('input[name="service-ui"]').forEach((r) => (r.checked = false));
     }
 
+    function clearWifiRadios() {
+      const ne = document.querySelector('input[name="wifi-ui"][value="ne"]');
+      if (ne) ne.checked = true;
+    }
+
+    function updateFormDevice() {
+      const p = typeof getProduct === 'function' ? getProduct(deviceSelect.value) : null;
+
+      if (!p) {
+        fDevice.value = '';
+        document.getElementById('f-wifi').value = '';
+        if (wifiWrap) wifiWrap.classList.add('hidden');
+        serviceWrap.classList.add('hidden');
+        fService.value = '';
+        clearServiceRadios();
+        return;
+      }
+
+      if (p.wifiOption && wifiWrap) {
+        wifiWrap.classList.remove('hidden');
+        const wifi = document.querySelector('input[name="wifi-ui"]:checked')?.value || 'ne';
+        fDevice.value = p.brand + ' ' + p.name + ' (' + wifiLabel(wifi) + ')';
+        document.getElementById('f-wifi').value = wifi === 'da' ? 'Z WiFi modulom' : 'Brez WiFi modula';
+      } else {
+        if (wifiWrap) wifiWrap.classList.add('hidden');
+        clearWifiRadios();
+        fDevice.value = p.brand + ' ' + p.name;
+        document.getElementById('f-wifi').value = '';
+      }
+
+      serviceWrap.classList.remove('hidden');
+    }
+
     // Pot B — pogojna logika: kategorija določa, katere naprave so na voljo
     function applyCategory(cat) {
       fCategory.value = catLabels[cat] || 'Splošno povpraševanje';
       fDevice.value = '';
       fService.value = '';
       clearServiceRadios();
+      clearWifiRadios();
+      if (wifiWrap) wifiWrap.classList.add('hidden');
 
       if (cat === 'klima' || cat === 'prezracevanje') {
         const items = productsByCategory(cat);
@@ -870,29 +920,13 @@
       categorySelect.addEventListener('change', () => applyCategory(categorySelect.value));
 
       deviceSelect.addEventListener('change', () => {
-        const parsed = typeof parseDeviceOption === 'function'
-          ? parseDeviceOption(deviceSelect.value)
-          : { id: deviceSelect.value, wifi: null };
-        const p = getProduct(parsed.id);
-        if (p) {
-          const label = typeof deviceOptionLabel === 'function'
-            ? deviceOptionLabel(p, parsed.wifi)
-            : p.brand + ' ' + p.name;
-          fDevice.value = label;
-          document.getElementById('f-wifi').value = parsed.wifi === 'da'
-            ? 'Z WiFi modulom'
-            : parsed.wifi === 'ne'
-              ? 'Brez WiFi modula'
-              : '';
-          serviceWrap.classList.remove('hidden');
-        } else {
-          fDevice.value = '';
-          document.getElementById('f-wifi').value = '';
-          serviceWrap.classList.add('hidden');
-          fService.value = '';
-          clearServiceRadios();
-        }
+        clearWifiRadios();
+        updateFormDevice();
       });
+
+      document.querySelectorAll('input[name="wifi-ui"]').forEach((r) =>
+        r.addEventListener('change', updateFormDevice)
+      );
 
       document.querySelectorAll('input[name="service-ui"]').forEach((r) =>
         r.addEventListener('change', () => { fService.value = r.value; })

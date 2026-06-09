@@ -250,26 +250,14 @@ function deviceOptionLabel(p, wifi) {
 }
 
 function formDeviceOptionsHtml(items) {
-  const opts = items.flatMap((p) => {
-    if (p.wifiOption && p.category === 'klima') {
-      return [
-        `<option value="${p.id}:ne">${deviceOptionLabel(p, 'ne')}</option>`,
-        `<option value="${p.id}:da">${deviceOptionLabel(p, 'da')}</option>`,
-      ];
-    }
-    return [`<option value="${p.id}">${deviceOptionLabel(p, null)}</option>`];
-  });
+  const opts = items.map(
+    (p) => `<option value="${p.id}">${p.brand} ${p.name}</option>`
+  );
   return '<option value="">Še ne vem / svetujte mi</option>' + opts.join('');
 }
 
-/** V katalogu: izdelke z opcijo WiFi razdeli na dve kartici */
-function expandCatalogVariants(items) {
-  return items.flatMap((p) => {
-    if (p.wifiOption && p.category === 'klima') {
-      return [{ product: p, wifi: 'ne' }, { product: p, wifi: 'da' }];
-    }
-    return [{ product: p, wifi: null }];
-  });
+function brandHasWifiOption(category, brand) {
+  return productsByCategory(category).some((p) => p.brand === brand && p.wifiOption);
 }
 
 /* ───────────── SVG ilustracija naprave ───────────── */
@@ -310,50 +298,91 @@ function productImageSlides(p) {
 }
 
 /* ───────────── Kartica izdelka ───────────── */
-function productCardHtml(p, index, wifi = null) {
-  const priced = wifi === 'da' ? productWithWifi(p, 'da') : p;
-  const wifiSuffix = wifi === 'da' ? ' — z WiFi' : wifi === 'ne' ? ' — brez WiFi' : '';
-  const displayName = p.name + wifiSuffix;
-  const detailHref = wifi ? `izdelek.html?id=${p.id}&wifi=${wifi}` : `izdelek.html?id=${p.id}`;
-  const lightboxTitle = p.brand + ' ' + displayName;
-
-  const badge = p.badge && wifi !== 'da'
+function productCardHtml(p, index) {
+  const badge = p.badge
     ? `<span class="absolute top-4 left-4 z-10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-brand-black text-white rounded-md">${p.badge}</span>`
-    : wifi === 'da'
-      ? `<span class="absolute top-4 left-4 z-10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-brand-blue-deep text-white rounded-md">WiFi</span>`
-      : '';
-  const border = p.badge || wifi === 'da' ? 'border-2 border-brand-blue shadow-md' : 'border border-gray-100 shadow-sm';
+    : '';
+  const border = p.badge ? 'border-2 border-brand-blue shadow-md' : 'border border-gray-100 shadow-sm';
   const features = p.features.slice(0, 3).map(
     (f) => `<li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-brand-blue-deep"></span>${f}</li>`
   ).join('');
 
   return `
     <article class="product-card scroll-reveal lift relative bg-white rounded-2xl ${border} overflow-hidden flex flex-col"
-      data-brand="${p.brand}" data-id="${p.id}" data-wifi="${wifi || ''}" style="transition-delay: ${(index % 3) * 90}ms">
+      data-brand="${p.brand}" data-id="${p.id}"${p.wifiOption ? ' data-wifi-option="true"' : ''} style="transition-delay: ${(index % 3) * 90}ms">
       ${badge}
       <button type="button" class="product-lightbox lightbox-item block w-full aspect-[4/3] bg-gradient-to-br from-brand-blue-soft to-white border-b border-gray-100 flex items-center justify-center relative overflow-hidden text-left"
-        data-src="${p.image || ''}" data-title="${lightboxTitle}" aria-label="Povečaj sliko — ${lightboxTitle}">
+        data-src="${p.image || ''}" data-title="${p.brand} ${p.name}" aria-label="Povečaj sliko — ${p.brand} ${p.name}">
         <div class="absolute inset-0 dot-grid opacity-30 pointer-events-none"></div>
         ${p.image
-          ? `<img src="${p.image}" alt="${lightboxTitle}" class="absolute inset-0 w-full h-full object-contain p-4" loading="lazy" />`
+          ? `<img src="${p.image}" alt="${p.brand} ${p.name}" class="absolute inset-0 w-full h-full object-contain p-4" loading="lazy" />`
           : deviceSvg(p)}
       </button>
       <div class="p-6 flex flex-col flex-1">
         <span class="text-xs font-bold text-brand-blue-deep uppercase tracking-wider mb-1">${p.series}</span>
-        <h3 class="text-lg font-bold mb-2"><a href="${detailHref}" class="hover:text-brand-blue-deep transition-colors">${displayName}</a></h3>
+        <h3 class="text-lg font-bold mb-2 product-card-title"><a href="izdelek.html?id=${p.id}" class="product-card-link hover:text-brand-blue-deep transition-colors">${p.name}</a></h3>
         <p class="text-sm text-gray-600 mb-4 flex-1">${p.short}</p>
         <ul class="text-xs text-gray-600 space-y-1.5 mb-4">${features}</ul>
         <div class="mb-5">
           <span class="text-xs text-gray-500">že od</span>
-          <span class="block text-xl font-extrabold text-brand-black">${formatEUR(priceFrom(priced))}</span>
+          <span class="block text-xl font-extrabold text-brand-black product-card-price">${formatEUR(priceFrom(p))}</span>
           <span class="text-[11px] text-gray-400">z vključenim DDV</span>
         </div>
-        <a href="${detailHref}" class="mt-auto w-full inline-flex items-center justify-center gap-2 py-3 px-4 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-colors">
+        <a href="izdelek.html?id=${p.id}" class="product-card-link mt-auto w-full inline-flex items-center justify-center gap-2 py-3 px-4 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-colors">
           Opis in cena
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
       </div>
     </article>`;
+}
+
+/** Posodobi ceno, naslov in povezavo na kartici glede na izbiro WiFi */
+function applyWifiToProductCard(card, wifi) {
+  const p = getProduct(card.dataset.id);
+  if (!p || !p.wifiOption) return;
+
+  const priced = productWithWifi(p, wifi);
+  const priceEl = card.querySelector('.product-card-price');
+  const titleLink = card.querySelector('.product-card-title .product-card-link');
+  const ctaLink = card.querySelector('a.product-card-link.mt-auto');
+  const suffix = wifi === 'da' ? ' — z WiFi' : ' — brez WiFi';
+
+  if (priceEl) priceEl.textContent = formatEUR(priceFrom(priced));
+  if (titleLink) {
+    titleLink.textContent = p.name + suffix;
+    titleLink.href = `izdelek.html?id=${p.id}&wifi=${wifi}`;
+  }
+  if (ctaLink) ctaLink.href = `izdelek.html?id=${p.id}&wifi=${wifi}`;
+}
+
+function applyCatalogWifi(container, wifi) {
+  const root = typeof container === 'string' ? document.getElementById(container) : container;
+  if (!root) return;
+  root.querySelectorAll('.product-card[data-wifi-option="true"]').forEach((card) => {
+    applyWifiToProductCard(card, wifi);
+  });
+}
+
+function filterBtnHtml(label, value, active, extraClass) {
+  return `
+    <button type="button" class="${extraClass} px-5 py-2.5 rounded-full text-sm font-bold border transition-all
+      ${active
+        ? 'bg-brand-blue-dark text-white border-brand-blue-dark shadow-md shadow-brand-blue/30'
+        : 'bg-white text-gray-700 border-gray-200 hover:border-brand-blue hover:text-brand-blue-deep'}"
+      data-filter="${value}">${label}</button>`;
+}
+
+function setFilterBtnActive(bar, activeBtn, btnClass) {
+  bar.querySelectorAll('.' + btnClass).forEach((b) => {
+    const isActive = b === activeBtn;
+    b.classList.toggle('bg-brand-blue-dark', isActive);
+    b.classList.toggle('text-white', isActive);
+    b.classList.toggle('border-brand-blue-dark', isActive);
+    b.classList.toggle('shadow-md', isActive);
+    b.classList.toggle('bg-white', !isActive);
+    b.classList.toggle('text-gray-700', !isActive);
+    b.classList.toggle('border-gray-200', !isActive);
+  });
 }
 
 /* ───────────── Render kataloga + filter po znamkah ───────────── */
@@ -366,41 +395,49 @@ function initCatalog(category, gridId, filterId) {
 
   const items = productsByCategory(category);
   const brands = [...new Set(items.map((p) => p.brand))];
-  const variants = expandCatalogVariants(items);
 
-  // Render kartice
-  grid.innerHTML = variants.map((v, i) => productCardHtml(v.product, i, v.wifi)).join('');
+  grid.innerHTML = items.map((p, i) => productCardHtml(p, i)).join('');
+  applyCatalogWifi(grid, 'ne');
+
+  const wifiWrap = document.getElementById('wifi-filter-wrap');
+  const wifiBar = document.getElementById('wifi-filter');
+  let activeWifi = 'ne';
+
+  if (wifiBar) {
+    wifiBar.innerHTML =
+      filterBtnHtml('Brez WiFi', 'ne', true, 'wifi-filter-btn') +
+      filterBtnHtml('Z WiFi', 'da', false, 'wifi-filter-btn');
+  }
+
+  function updateWifiFilter(brandFilter) {
+    const show = brandFilter !== 'all' && brandHasWifiOption(category, brandFilter);
+    if (wifiWrap) wifiWrap.classList.toggle('hidden', !show);
+    if (show) {
+      activeWifi = 'ne';
+      if (wifiBar) {
+        const first = wifiBar.querySelector('.wifi-filter-btn');
+        setFilterBtnActive(wifiBar, first, 'wifi-filter-btn');
+      }
+      applyCatalogWifi(grid, 'ne');
+    } else {
+      applyCatalogWifi(grid, 'ne');
+    }
+  }
 
   // Render filter gumbe (Vse + posamezne znamke)
   if (filterBar) {
-    const btn = (label, value, active) => `
-      <button type="button" class="brand-filter-btn px-5 py-2.5 rounded-full text-sm font-bold border transition-all
-        ${active
-          ? 'bg-brand-blue-dark text-white border-brand-blue-dark shadow-md shadow-brand-blue/30'
-          : 'bg-white text-gray-700 border-gray-200 hover:border-brand-blue hover:text-brand-blue-deep'}"
-        data-filter="${value}">${label}</button>`;
-
     filterBar.innerHTML =
-      btn('Vse znamke', 'all', true) + brands.map((b) => btn(b, b, false)).join('');
+      filterBtnHtml('Vse znamke', 'all', true, 'brand-filter-btn') +
+      brands.map((b) => filterBtnHtml(b, b, false, 'brand-filter-btn')).join('');
 
     filterBar.addEventListener('click', (e) => {
       const target = e.target.closest('.brand-filter-btn');
       if (!target) return;
       const filter = target.dataset.filter;
 
-      // Posodobi aktivno stanje gumbov
-      filterBar.querySelectorAll('.brand-filter-btn').forEach((b) => {
-        const isActive = b === target;
-        b.classList.toggle('bg-brand-blue-dark', isActive);
-        b.classList.toggle('text-white', isActive);
-        b.classList.toggle('border-brand-blue-dark', isActive);
-        b.classList.toggle('shadow-md', isActive);
-        b.classList.toggle('bg-white', !isActive);
-        b.classList.toggle('text-gray-700', !isActive);
-        b.classList.toggle('border-gray-200', !isActive);
-      });
+      setFilterBtnActive(filterBar, target, 'brand-filter-btn');
+      updateWifiFilter(filter);
 
-      // Filtriraj kartice
       let visible = 0;
       grid.querySelectorAll('.product-card').forEach((card) => {
         const match = filter === 'all' || card.dataset.brand === filter;
@@ -408,8 +445,22 @@ function initCatalog(category, gridId, filterId) {
         if (match) visible++;
       });
 
+      if (filter !== 'all' && brandHasWifiOption(category, filter)) {
+        applyCatalogWifi(grid, activeWifi);
+      }
+
       const empty = document.getElementById('catalog-empty');
       if (empty) empty.classList.toggle('hidden', visible > 0);
+    });
+  }
+
+  if (wifiBar) {
+    wifiBar.addEventListener('click', (e) => {
+      const target = e.target.closest('.wifi-filter-btn');
+      if (!target) return;
+      activeWifi = target.dataset.filter;
+      setFilterBtnActive(wifiBar, target, 'wifi-filter-btn');
+      applyCatalogWifi(grid, activeWifi);
     });
   }
 
@@ -423,5 +474,6 @@ function initHomePreview(gridId, category, limit = 3) {
   grid.dataset.lightboxGroup = gridId;
   const items = productsByCategory(category).slice(0, limit);
   grid.innerHTML = items.map((p, i) => productCardHtml(p, i)).join('');
+  applyCatalogWifi(grid, 'ne');
   if (typeof initScrollReveal === 'function') initScrollReveal('.scroll-reveal');
 }
