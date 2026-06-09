@@ -11,7 +11,7 @@ function galleryPlaceholderHtml(title) {
 function createGalleryCard(item, index) {
   const btn = document.createElement('button');
   btn.type = 'button';
-  btn.className = 'gallery-card group relative aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 shadow-sm text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2';
+  btn.className = 'gallery-card lightbox-item group relative aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 shadow-sm text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2';
   btn.dataset.index = String(index);
   btn.dataset.src = item.src;
   btn.dataset.title = item.title;
@@ -50,6 +50,7 @@ function initGalleryGrid(containerId, items, options = {}) {
   const list = limit ? items.slice(0, limit) : items;
 
   container.className = gridClass;
+  container.dataset.lightboxGroup = containerId;
   container.innerHTML = '';
   list.forEach((item, i) => {
     const globalIndex = GALLERY_ITEMS.indexOf(item);
@@ -108,6 +109,66 @@ function initGalleryCategoryFilter(filterId, gridId, options = {}) {
   render();
 }
 
+function getVisibleLightboxItems(root) {
+  return [...root.querySelectorAll('.lightbox-item')].filter((el) => {
+    if (el.classList.contains('hidden')) return false;
+    const card = el.closest('.product-card');
+    if (card && card.classList.contains('hidden')) return false;
+    return true;
+  });
+}
+
+function getLightboxGroupItems(trigger) {
+  const group = trigger.closest('[data-lightbox-group]');
+  const root = group || document;
+  return getVisibleLightboxItems(root).map((el) => ({
+    src: el.dataset.src || '',
+    title: el.dataset.title || '',
+  }));
+}
+
+function ensureLightboxNav(lightbox) {
+  if (document.getElementById('lightbox-prev')) return;
+
+  const navBtnClass =
+    'absolute top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue';
+
+  const prev = document.createElement('button');
+  prev.type = 'button';
+  prev.id = 'lightbox-prev';
+  prev.className = navBtnClass + ' left-3 sm:left-6';
+  prev.setAttribute('aria-label', 'Prejšnja slika');
+  prev.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>';
+
+  const next = document.createElement('button');
+  next.type = 'button';
+  next.id = 'lightbox-next';
+  next.className = navBtnClass + ' right-3 sm:right-6';
+  next.setAttribute('aria-label', 'Naslednja slika');
+  next.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>';
+
+  const counter = document.createElement('p');
+  counter.id = 'lightbox-counter';
+  counter.className = 'text-white/75 text-sm font-medium mt-2';
+
+  lightbox.appendChild(prev);
+  lightbox.appendChild(next);
+
+  const caption = document.getElementById('lightbox-caption');
+  if (caption) caption.insertAdjacentElement('afterend', counter);
+
+  if (!document.getElementById('lightbox-nav-styles')) {
+    const style = document.createElement('style');
+    style.id = 'lightbox-nav-styles';
+    style.textContent = `
+      #lightbox-prev[disabled], #lightbox-next[disabled] { opacity: 0.35; cursor: not-allowed; }
+      .product-lightbox { cursor: zoom-in; }
+      .product-lightbox:focus-visible { outline: 2px solid #5BA3C9; outline-offset: 2px; }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
 function initLightbox(showMoreLink) {
   const lightbox = document.getElementById('lightbox');
   if (!lightbox) return;
@@ -118,19 +179,47 @@ function initLightbox(showMoreLink) {
   const lightboxMore = document.getElementById('lightbox-more');
   const closeBtn = document.getElementById('lightbox-close');
 
+  ensureLightboxNav(lightbox);
+
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  const counterEl = document.getElementById('lightbox-counter');
+
   if (lightboxMore) {
     lightboxMore.classList.toggle('hidden', !showMoreLink);
   }
 
-  function openLightbox(src, title) {
-    lightboxCaption.textContent = title;
-    lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
+  let slides = [];
+  let currentIndex = 0;
+
+  function renderSlide() {
+    const slide = slides[currentIndex];
+    if (!slide) return;
+
+    lightboxCaption.textContent = slide.title;
+
+    if (counterEl) {
+      counterEl.textContent = slides.length > 1 ? `${currentIndex + 1} / ${slides.length}` : '';
+      counterEl.classList.toggle('hidden', slides.length <= 1);
+    }
+
+    if (prevBtn) prevBtn.disabled = slides.length <= 1;
+    if (nextBtn) nextBtn.disabled = slides.length <= 1;
+
+    if (!slide.src) {
+      lightboxImg.classList.add('hidden');
+      if (lightboxPlaceholder) {
+        lightboxPlaceholder.classList.remove('hidden');
+        const p = lightboxPlaceholder.querySelector('p');
+        if (p) p.textContent = slide.title;
+      }
+      return;
+    }
 
     const testImg = new Image();
     testImg.onload = () => {
-      lightboxImg.src = src;
-      lightboxImg.alt = title;
+      lightboxImg.src = slide.src;
+      lightboxImg.alt = slide.title;
       lightboxImg.classList.remove('hidden');
       if (lightboxPlaceholder) lightboxPlaceholder.classList.add('hidden');
     };
@@ -138,10 +227,37 @@ function initLightbox(showMoreLink) {
       lightboxImg.classList.add('hidden');
       if (lightboxPlaceholder) {
         lightboxPlaceholder.classList.remove('hidden');
-        lightboxPlaceholder.querySelector('p').textContent = title;
+        const p = lightboxPlaceholder.querySelector('p');
+        if (p) p.textContent = slide.title;
       }
     };
-    testImg.src = src;
+    testImg.src = slide.src;
+  }
+
+  function openAtIndex(index) {
+    if (!slides.length) return;
+    currentIndex = (index + slides.length) % slides.length;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderSlide();
+  }
+
+  function openLightboxFromTrigger(trigger) {
+    const group = trigger.closest('[data-lightbox-group]');
+    const root = group || document;
+    const items = getVisibleLightboxItems(root);
+    slides = items.map((el) => ({
+      src: el.dataset.src || '',
+      title: el.dataset.title || '',
+    }));
+    if (!slides.length) return;
+    const idx = items.indexOf(trigger);
+    openAtIndex(idx >= 0 ? idx : 0);
+  }
+
+  function step(delta) {
+    if (slides.length <= 1) return;
+    openAtIndex(currentIndex + delta);
   }
 
   function closeLightbox() {
@@ -150,17 +266,38 @@ function initLightbox(showMoreLink) {
     lightboxImg.classList.add('hidden');
     if (lightboxPlaceholder) lightboxPlaceholder.classList.add('hidden');
     document.body.style.overflow = '';
+    slides = [];
+    currentIndex = 0;
   }
 
   document.addEventListener('click', (e) => {
-    const card = e.target.closest('.gallery-card');
-    if (!card) return;
-    openLightbox(card.dataset.src, card.dataset.title);
+    const trigger = e.target.closest('.lightbox-item');
+    if (!trigger) return;
+    e.preventDefault();
+    openLightboxFromTrigger(trigger);
+  });
+
+  prevBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    step(-1);
+  });
+
+  nextBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    step(1);
   });
 
   closeBtn?.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
 
-  return { openLightbox, closeLightbox };
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+
+  return { openLightbox: openLightboxFromTrigger, closeLightbox, openAtIndex };
 }

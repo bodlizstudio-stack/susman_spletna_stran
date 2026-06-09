@@ -232,6 +232,46 @@ function wifiLabel(wifi) {
   return wifi === 'da' ? 'z WiFi modulom' : 'brez WiFi modula';
 }
 
+/** Razčleni vrednost iz obrazca: "id" ali "id:da" / "id:ne" */
+function parseDeviceOption(value) {
+  if (!value) return { id: '', wifi: null };
+  const parts = value.split(':');
+  const id = parts[0];
+  const w = parts[1];
+  const wifi = w === 'da' ? 'da' : w === 'ne' ? 'ne' : null;
+  return { id, wifi };
+}
+
+function deviceOptionLabel(p, wifi) {
+  const base = p.brand + ' ' + p.name;
+  if (wifi === 'da') return base + ' — z WiFi';
+  if (wifi === 'ne') return base + ' — brez WiFi';
+  return base;
+}
+
+function formDeviceOptionsHtml(items) {
+  const opts = items.flatMap((p) => {
+    if (p.wifiOption && p.category === 'klima') {
+      return [
+        `<option value="${p.id}:ne">${deviceOptionLabel(p, 'ne')}</option>`,
+        `<option value="${p.id}:da">${deviceOptionLabel(p, 'da')}</option>`,
+      ];
+    }
+    return [`<option value="${p.id}">${deviceOptionLabel(p, null)}</option>`];
+  });
+  return '<option value="">Še ne vem / svetujte mi</option>' + opts.join('');
+}
+
+/** V katalogu: izdelke z opcijo WiFi razdeli na dve kartici */
+function expandCatalogVariants(items) {
+  return items.flatMap((p) => {
+    if (p.wifiOption && p.category === 'klima') {
+      return [{ product: p, wifi: 'ne' }, { product: p, wifi: 'da' }];
+    }
+    return [{ product: p, wifi: null }];
+  });
+}
+
 /* ───────────── SVG ilustracija naprave ───────────── */
 function deviceSvg(p) {
   if (p.category === 'prezracevanje') {
@@ -260,35 +300,55 @@ function deviceSvg(p) {
     </svg>`;
 }
 
+function productImageSlides(p) {
+  const title = p.brand + ' ' + p.name;
+  if (Array.isArray(p.images) && p.images.length) {
+    return p.images.map((src) => ({ src, title }));
+  }
+  if (p.image) return [{ src: p.image, title }];
+  return [{ src: '', title }];
+}
+
 /* ───────────── Kartica izdelka ───────────── */
-function productCardHtml(p, index) {
-  const badge = p.badge
+function productCardHtml(p, index, wifi = null) {
+  const priced = wifi === 'da' ? productWithWifi(p, 'da') : p;
+  const wifiSuffix = wifi === 'da' ? ' — z WiFi' : wifi === 'ne' ? ' — brez WiFi' : '';
+  const displayName = p.name + wifiSuffix;
+  const detailHref = wifi ? `izdelek.html?id=${p.id}&wifi=${wifi}` : `izdelek.html?id=${p.id}`;
+  const lightboxTitle = p.brand + ' ' + displayName;
+
+  const badge = p.badge && wifi !== 'da'
     ? `<span class="absolute top-4 left-4 z-10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-brand-black text-white rounded-md">${p.badge}</span>`
-    : '';
-  const border = p.badge ? 'border-2 border-brand-blue shadow-md' : 'border border-gray-100 shadow-sm';
+    : wifi === 'da'
+      ? `<span class="absolute top-4 left-4 z-10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-brand-blue-deep text-white rounded-md">WiFi</span>`
+      : '';
+  const border = p.badge || wifi === 'da' ? 'border-2 border-brand-blue shadow-md' : 'border border-gray-100 shadow-sm';
   const features = p.features.slice(0, 3).map(
     (f) => `<li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-brand-blue-deep"></span>${f}</li>`
   ).join('');
 
   return `
     <article class="product-card scroll-reveal lift relative bg-white rounded-2xl ${border} overflow-hidden flex flex-col"
-      data-brand="${p.brand}" data-id="${p.id}" style="transition-delay: ${(index % 3) * 90}ms">
+      data-brand="${p.brand}" data-id="${p.id}" data-wifi="${wifi || ''}" style="transition-delay: ${(index % 3) * 90}ms">
       ${badge}
-      <a href="izdelek.html?id=${p.id}" class="block aspect-[4/3] bg-gradient-to-br from-brand-blue-soft to-white border-b border-gray-100 flex items-center justify-center relative overflow-hidden">
-        <div class="absolute inset-0 dot-grid opacity-30"></div>
-        ${deviceSvg(p)}
-      </a>
+      <button type="button" class="product-lightbox lightbox-item block w-full aspect-[4/3] bg-gradient-to-br from-brand-blue-soft to-white border-b border-gray-100 flex items-center justify-center relative overflow-hidden text-left"
+        data-src="${p.image || ''}" data-title="${lightboxTitle}" aria-label="Povečaj sliko — ${lightboxTitle}">
+        <div class="absolute inset-0 dot-grid opacity-30 pointer-events-none"></div>
+        ${p.image
+          ? `<img src="${p.image}" alt="${lightboxTitle}" class="absolute inset-0 w-full h-full object-contain p-4" loading="lazy" />`
+          : deviceSvg(p)}
+      </button>
       <div class="p-6 flex flex-col flex-1">
         <span class="text-xs font-bold text-brand-blue-deep uppercase tracking-wider mb-1">${p.series}</span>
-        <h3 class="text-lg font-bold mb-2"><a href="izdelek.html?id=${p.id}" class="hover:text-brand-blue-deep transition-colors">${p.name}</a></h3>
+        <h3 class="text-lg font-bold mb-2"><a href="${detailHref}" class="hover:text-brand-blue-deep transition-colors">${displayName}</a></h3>
         <p class="text-sm text-gray-600 mb-4 flex-1">${p.short}</p>
         <ul class="text-xs text-gray-600 space-y-1.5 mb-4">${features}</ul>
         <div class="mb-5">
           <span class="text-xs text-gray-500">že od</span>
-          <span class="block text-xl font-extrabold text-brand-black">${formatEUR(priceFrom(p))}</span>
+          <span class="block text-xl font-extrabold text-brand-black">${formatEUR(priceFrom(priced))}</span>
           <span class="text-[11px] text-gray-400">z vključenim DDV</span>
         </div>
-        <a href="izdelek.html?id=${p.id}" class="mt-auto w-full inline-flex items-center justify-center gap-2 py-3 px-4 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-colors">
+        <a href="${detailHref}" class="mt-auto w-full inline-flex items-center justify-center gap-2 py-3 px-4 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-colors">
           Opis in cena
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
@@ -302,11 +362,14 @@ function initCatalog(category, gridId, filterId) {
   const filterBar = document.getElementById(filterId);
   if (!grid) return;
 
+  grid.dataset.lightboxGroup = gridId;
+
   const items = productsByCategory(category);
   const brands = [...new Set(items.map((p) => p.brand))];
+  const variants = expandCatalogVariants(items);
 
   // Render kartice
-  grid.innerHTML = items.map((p, i) => productCardHtml(p, i)).join('');
+  grid.innerHTML = variants.map((v, i) => productCardHtml(v.product, i, v.wifi)).join('');
 
   // Render filter gumbe (Vse + posamezne znamke)
   if (filterBar) {
@@ -357,6 +420,7 @@ function initCatalog(category, gridId, filterId) {
 function initHomePreview(gridId, category, limit = 3) {
   const grid = document.getElementById(gridId);
   if (!grid) return;
+  grid.dataset.lightboxGroup = gridId;
   const items = productsByCategory(category).slice(0, limit);
   grid.innerHTML = items.map((p, i) => productCardHtml(p, i)).join('');
   if (typeof initScrollReveal === 'function') initScrollReveal('.scroll-reveal');

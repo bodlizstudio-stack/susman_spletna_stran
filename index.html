@@ -716,7 +716,7 @@
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     <figure class="max-w-4xl w-full flex flex-col items-center">
-      <div class="relative w-full flex items-center justify-center min-h-[200px]">
+      <div class="relative w-full flex items-center justify-center min-h-[200px] px-12 sm:px-16">
         <img id="lightbox-img" src="" alt="" class="hidden w-full max-h-[65vh] object-contain rounded-2xl shadow-2xl bg-white" />
         <div id="lightbox-placeholder" class="hidden w-full max-w-lg aspect-[4/3] rounded-2xl bg-gradient-to-br from-brand-blue-soft to-brand-blue/40 border border-white/20 flex items-center justify-center p-8">
           <p class="text-center text-white font-bold text-lg"></p>
@@ -852,11 +852,13 @@
 
       if (cat === 'klima' || cat === 'prezracevanje') {
         const items = productsByCategory(cat);
-        deviceSelect.innerHTML =
-          '<option value="">Še ne vem / svetujte mi</option>' +
-          items.map((p) => `<option value="${p.id}">${p.brand} ${p.name}</option>`).join('');
+        deviceSelect.innerHTML = typeof formDeviceOptionsHtml === 'function'
+          ? formDeviceOptionsHtml(items)
+          : '<option value="">Še ne vem / svetujte mi</option>' +
+            items.map((p) => `<option value="${p.id}">${p.brand} ${p.name}</option>`).join('');
         deviceWrap.classList.remove('hidden');
         serviceWrap.classList.add('hidden');
+        document.getElementById('f-wifi').value = '';
       } else {
         deviceWrap.classList.add('hidden');
         serviceWrap.classList.add('hidden');
@@ -868,12 +870,24 @@
       categorySelect.addEventListener('change', () => applyCategory(categorySelect.value));
 
       deviceSelect.addEventListener('change', () => {
-        const p = getProduct(deviceSelect.value);
+        const parsed = typeof parseDeviceOption === 'function'
+          ? parseDeviceOption(deviceSelect.value)
+          : { id: deviceSelect.value, wifi: null };
+        const p = getProduct(parsed.id);
         if (p) {
-          fDevice.value = p.brand + ' ' + p.name;
+          const label = typeof deviceOptionLabel === 'function'
+            ? deviceOptionLabel(p, parsed.wifi)
+            : p.brand + ' ' + p.name;
+          fDevice.value = label;
+          document.getElementById('f-wifi').value = parsed.wifi === 'da'
+            ? 'Z WiFi modulom'
+            : parsed.wifi === 'ne'
+              ? 'Brez WiFi modula'
+              : '';
           serviceWrap.classList.remove('hidden');
         } else {
           fDevice.value = '';
+          document.getElementById('f-wifi').value = '';
           serviceWrap.classList.add('hidden');
           fService.value = '';
           clearServiceRadios();

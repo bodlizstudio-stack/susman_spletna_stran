@@ -59,6 +59,10 @@
     }
     .pt-safe { padding-top: env(safe-area-inset-top); }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    #lightbox.open { display: flex; }
+    #lightbox { display: none; }
+    #lightbox.open #lightbox-img { animation: zoomIn 0.35s ease-out; }
+    @keyframes zoomIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
   </style>
 </head>
 <body class="font-sans text-brand-ink bg-white antialiased">
@@ -162,17 +166,17 @@
       const backHref = product.category === 'prezracevanje' ? 'prezracevanje.html' : 'klimatske-naprave.html';
       const backLabel = CATEGORY_LABEL[product.category];
 
-      let wifi = 'ne';
+      let wifi = params.get('wifi') === 'da' ? 'da' : 'ne';
       const wifiBlock = product.wifiOption ? `
               <div class="mb-5">
                 <h3 class="text-sm font-bold text-gray-700 mb-3">WiFi modul</h3>
                 <div class="grid sm:grid-cols-2 gap-3">
                   <label class="service-option flex items-center gap-3 p-3.5 rounded-xl border-2 border-gray-200 cursor-pointer">
-                    <input type="radio" name="wifi" value="ne" class="w-5 h-5 accent-brand-blue-deep" checked />
+                    <input type="radio" name="wifi" value="ne" class="w-5 h-5 accent-brand-blue-deep" ${wifi === 'ne' ? 'checked' : ''} />
                     <span class="text-sm font-semibold text-brand-black">Brez WiFi</span>
                   </label>
                   <label class="service-option flex items-center gap-3 p-3.5 rounded-xl border-2 border-gray-200 cursor-pointer">
-                    <input type="radio" name="wifi" value="da" class="w-5 h-5 accent-brand-blue-deep" />
+                    <input type="radio" name="wifi" value="da" class="w-5 h-5 accent-brand-blue-deep" ${wifi === 'da' ? 'checked' : ''} />
                     <span class="text-sm font-semibold text-brand-black">Z WiFi <span class="block text-xs font-normal text-gray-500">+${formatEUR((product.wifiAddonNet || 0) * (1 + VAT_DEVICE))}</span></span>
                   </label>
                 </div>
@@ -188,6 +192,17 @@
           <span class="text-sm font-bold text-brand-black">${value}</span>
         </div>`;
 
+      const imageSlides = productImageSlides(product);
+      const thumbsHtml = imageSlides.length > 1
+        ? `<div class="mt-3 grid grid-cols-4 sm:grid-cols-5 gap-2">${imageSlides.map((s) => `
+            <button type="button" class="lightbox-item aspect-square rounded-xl overflow-hidden border-2 border-gray-100 hover:border-brand-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
+              data-src="${s.src}" data-title="${s.title}" aria-label="${s.title}">
+              ${s.src
+                ? `<img src="${s.src}" alt="" class="w-full h-full object-cover" loading="lazy" />`
+                : `<span class="flex items-center justify-center h-full text-[10px] font-bold text-gray-500 p-1 text-center bg-brand-blue-soft">${product.name}</span>`}
+            </button>`).join('')}</div>`
+        : '';
+
       container.innerHTML = `
         <nav class="flex items-center gap-2 text-xs text-gray-500 mb-6">
           <a href="index.html" class="hover:text-brand-blue-deep">Domov</a><span>/</span>
@@ -197,11 +212,15 @@
 
         <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           <!-- Slika -->
-          <div class="lg:sticky lg:top-28">
-            <div class="aspect-[4/3] rounded-3xl bg-gradient-to-br from-brand-blue-soft to-white border border-gray-100 shadow-sm flex items-center justify-center relative overflow-hidden">
-              <div class="absolute inset-0 dot-grid opacity-30"></div>
-              ${deviceSvg(product)}
-            </div>
+          <div id="product-lightbox-group" data-lightbox-group="product-detail" class="lg:sticky lg:top-28">
+            <button type="button" class="lightbox-item product-lightbox w-full aspect-[4/3] rounded-3xl bg-gradient-to-br from-brand-blue-soft to-white border border-gray-100 shadow-sm flex items-center justify-center relative overflow-hidden"
+              data-src="${imageSlides[0].src}" data-title="${imageSlides[0].title}" aria-label="Povečaj sliko — ${imageSlides[0].title}">
+              <div class="absolute inset-0 dot-grid opacity-30 pointer-events-none"></div>
+              ${imageSlides[0].src
+                ? `<img src="${imageSlides[0].src}" alt="${imageSlides[0].title}" class="absolute inset-0 w-full h-full object-contain p-4" loading="lazy" />`
+                : deviceSvg(product)}
+            </button>
+            ${thumbsHtml}
             <div class="mt-4 grid grid-cols-3 gap-3">
               <div class="text-center p-3 rounded-xl bg-white border border-gray-100">
                 <p class="text-[11px] text-gray-500">Moč</p>
@@ -221,7 +240,7 @@
           <!-- Podrobnosti + izračun -->
           <div>
             <span class="text-sm font-bold text-brand-blue-deep uppercase tracking-wider">${product.series}</span>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-brand-black mt-1 mb-4">${product.name}</h1>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-brand-black mt-1 mb-4">${product.name}${product.wifiOption ? (wifi === 'da' ? ' — z WiFi' : ' — brez WiFi') : ''}</h1>
             <p class="text-gray-600 leading-relaxed mb-6">${product.description}</p>
 
             <ul class="space-y-2.5 mb-8">${featureList}</ul>
@@ -312,5 +331,23 @@
       updateSelection();
     })();
   </script>
+
+  <div id="lightbox" class="fixed inset-0 z-[100] flex-col items-center justify-center p-4 sm:p-8 bg-brand-black/85 backdrop-blur-md" role="dialog" aria-modal="true" aria-label="Povečana slika">
+    <button type="button" id="lightbox-close" class="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center z-10" aria-label="Zapri">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <figure class="max-w-5xl w-full flex flex-col items-center">
+      <div class="relative w-full flex items-center justify-center min-h-[200px] px-12 sm:px-16">
+        <img id="lightbox-img" src="" alt="" class="hidden w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl bg-white" />
+        <div id="lightbox-placeholder" class="hidden w-full max-w-2xl aspect-[4/3] rounded-2xl bg-gradient-to-br from-brand-blue-soft to-brand-blue/40 flex items-center justify-center p-8">
+          <p class="text-center text-white font-bold text-xl"></p>
+        </div>
+      </div>
+      <figcaption id="lightbox-caption" class="mt-4 text-center text-white text-lg font-semibold"></figcaption>
+      <div id="lightbox-more" class="hidden"></div>
+    </figure>
+  </div>
+  <script src="gallery.js"></script>
+  <script>initLightbox(false);</script>
 </body>
 </html>
