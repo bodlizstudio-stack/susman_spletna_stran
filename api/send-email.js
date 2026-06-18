@@ -117,7 +117,7 @@ module.exports = async (req, res) => {
               <span style="font-size: 14px; font-weight: bold; background-color: #A5D1E8; padding: 8px 16px; border-radius: 6px; color: #0a0a0a; text-transform: uppercase; letter-spacing: 2px;">PRO-S</span>
             </div>
             <h2 style="color: #0a0a0a; text-align: center; font-size: 22px; margin-bottom: 15px;">Hvala za vaše povpraševanje!</h2>
-            <p style="color: #333; line-height: 1.6; font-size: 15px;">Pozdravljeni <strong>\${escapeHtml(name)}</strong>,</p>
+            <p style="color: #333; line-height: 1.6; font-size: 15px;">Pozdravljeni <strong>${escapeHtml(name)}</strong>,</p>
             <p style="color: #333; line-height: 1.6; font-size: 15px;">zahvaljujemo se vam za oddano povpraševanje prek naše spletne strani. Vaše sporočilo smo uspešno prejeli in zabeležili v naš sistem.</p>
             <div style="background-color: #E8F4FA; border-left: 4px solid #3B82B5; padding: 15px; border-radius: 5px; margin: 25px 0;">
               <p style="margin: 0; color: #3B82B5; font-weight: bold; font-size: 14px; text-transform: uppercase;">Kaj sledi?</p>

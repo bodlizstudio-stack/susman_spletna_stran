@@ -231,53 +231,72 @@
         <form id="contact-form" class="scroll-reveal space-y-5 p-6 md:p-8 rounded-3xl bg-white border border-gray-100 shadow-xl shadow-brand-blue/10" novalidate>
           <!-- Skrito polje za zaščito pred boti (Honeypot) -->
           <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" />
-          <div>
-            <label for="category-select" class="block text-sm font-semibold text-gray-700 mb-1.5">Kategorija povpraševanja <span class="text-brand-blue-deep">*</span></label>
-            <select id="category-select" name="category" required
-              class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition">
-              <option value="Klimatske naprave">Klimatske naprave</option>
-              <option value="Prezračevanje" selected>Prezračevanje</option>
-              <option value="Ogrevanje in vodovod">Ogrevanje in vodovod</option>
-              <option value="Splošna vprašanja">Splošna vprašanja</option>
-            </select>
-          </div>
-          
-          <div class="grid sm:grid-cols-2 gap-5">
+          <div id="form-fields" class="space-y-5">
             <div>
-              <label for="name" class="block text-sm font-semibold text-gray-700 mb-1.5">Ime in priimek <span class="text-brand-blue-deep">*</span></label>
-              <input type="text" id="name" name="name" required autocomplete="name"
-                class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition"
-                placeholder="Janez Novak" />
+              <label for="category-select" class="block text-sm font-semibold text-gray-700 mb-1.5">Kategorija povpraševanja <span class="text-brand-blue-deep">*</span></label>
+              <select id="category-select" name="category" required
+                class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition">
+                <option value="Klimatske naprave">Klimatske naprave</option>
+                <option value="Prezračevanje" selected>Prezračevanje</option>
+                <option value="Ogrevanje in vodovod">Ogrevanje in vodovod</option>
+                <option value="Splošna vprašanja">Splošna vprašanja</option>
+              </select>
             </div>
+            
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label for="name" class="block text-sm font-semibold text-gray-700 mb-1.5">Ime in priimek <span class="text-brand-blue-deep">*</span></label>
+                <input type="text" id="name" name="name" required autocomplete="name"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition"
+                  placeholder="Janez Novak" />
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-semibold text-gray-700 mb-1.5">E-poštni naslov <span class="text-brand-blue-deep">*</span></label>
+                <input type="email" id="email" name="email" required autocomplete="email"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition"
+                  placeholder="janez.novak@primer.si" />
+              </div>
+            </div>
+
             <div>
-              <label for="email" class="block text-sm font-semibold text-gray-700 mb-1.5">E-poštni naslov <span class="text-brand-blue-deep">*</span></label>
-              <input type="email" id="email" name="email" required autocomplete="email"
+              <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1.5">Telefonska številka <span class="text-brand-blue-deep">*</span></label>
+              <input type="tel" id="phone" name="phone" required autocomplete="tel"
                 class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition"
-                placeholder="janez.novak@primer.si" />
+                placeholder="051 374 829" />
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-semibold text-gray-700 mb-1.5">Vaše sporočilo / podrobnosti povpraševanja</label>
+              <textarea id="message" name="message" rows="4"
+                class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition"
+                placeholder="Vpišite ali gre za novogradnjo ali sanacijo, kvadraturo objekta ali druga vprašanja..."></textarea>
+            </div>
+
+            <div class="pt-2">
+              <button type="submit"
+                class="w-full inline-flex items-center justify-center gap-2 py-4 px-6 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-all shadow-lg shadow-brand-blue/30 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2">
+                Pošlji povpraševanje
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </button>
+              <p id="form-error" class="hidden text-sm text-red-600 font-semibold text-center mt-3 animate-fade-up"></p>
             </div>
           </div>
 
-          <div>
-            <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1.5">Telefonska številka <span class="text-brand-blue-deep">*</span></label>
-            <input type="tel" id="phone" name="phone" required autocomplete="tel"
-              class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition"
-              placeholder="051 374 829" />
-          </div>
-
-          <div>
-            <label for="message" class="block text-sm font-semibold text-gray-700 mb-1.5">Vaše sporočilo / podrobnosti povpraševanja</label>
-            <textarea id="message" name="message" rows="4"
-              class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition"
-              placeholder="Vpišite ali gre za novogradnjo ali sanacijo, kvadraturo objekta ali druga vprašanja..."></textarea>
-          </div>
-
-          <div class="pt-2">
-            <button type="submit"
-              class="w-full inline-flex items-center justify-center gap-2 py-4 px-6 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-all shadow-lg shadow-brand-blue/30 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2">
-              Pošlji povpraševanje
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-            </button>
-            <p id="form-success" class="hidden text-center text-sm font-semibold mt-3"></p>
+          <div id="form-success" class="hidden text-center py-10 px-4 animate-fade-up">
+            <div class="mx-auto w-16 h-16 mb-6 flex items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
+              <svg class="w-10 h-10 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Sporočilo uspešno poslano!</h3>
+            <p class="text-gray-600 text-sm leading-relaxed max-w-md mx-auto mb-6">
+              Hvala za vaše povpraševanje. Na vaš e-poštni naslov smo ravnokar poslali potrditveno sporočilo. Naša ekipa bo vaše sporočilo skrbno pregledala in vas kontaktirala v najkrajšem možnem času.
+            </p>
+            <div class="inline-flex items-center gap-2 text-xs text-gray-400 border-t border-gray-100 pt-5 w-full justify-center">
+              <span>Ekipa <strong>PRO-S</strong></span>
+              <span class="text-gray-300">|</span>
+              <span>Tel: <a href="tel:+38651374829" class="text-brand-blue-deep font-semibold hover:underline">051 374 829</a></span>
+            </div>
           </div>
         </form>
       </div>
@@ -336,6 +355,8 @@
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn.innerHTML;
       const successMsg = document.getElementById('form-success');
+      const formFields = document.getElementById('form-fields');
+      const formError = document.getElementById('form-error');
 
       submitBtn.disabled = true;
       submitBtn.innerHTML = `
@@ -369,8 +390,7 @@
         const result = await response.json();
 
         if (response.ok && result.success) {
-          successMsg.textContent = 'Hvala! Vaše povpraševanje je bilo uspešno poslano.';
-          successMsg.className = 'text-center text-sm text-emerald-600 font-bold mt-3';
+          formFields.classList.add('hidden');
           successMsg.classList.remove('hidden');
           form.reset();
         } else {
@@ -378,13 +398,12 @@
         }
       } catch (error) {
         console.error('Napaka pri pošiljanju:', error);
-        successMsg.textContent = error.message || 'Prišlo je do napake. Prosimo poskusite ponovno.';
-        successMsg.className = 'text-center text-sm text-red-600 font-bold mt-3';
-        successMsg.classList.remove('hidden');
+        formError.textContent = error.message || 'Prišlo je do napake. Prosimo poskusite ponovno.';
+        formError.classList.remove('hidden');
+        setTimeout(() => formError.classList.add('hidden'), 8000);
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
-        setTimeout(() => successMsg.classList.add('hidden'), 8000);
       }
     });
   </script>
