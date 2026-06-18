@@ -258,6 +258,8 @@
         </div>
 
         <form id="contact-form" class="scroll-reveal space-y-5 p-6 md:p-8 rounded-3xl bg-white border border-gray-100 shadow-xl shadow-brand-blue/10" novalidate>
+          <!-- Skrito polje za zaščito pred boti (Honeypot) -->
+          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" />
           <div>
             <label for="category-select" class="block text-sm font-semibold text-gray-700 mb-1.5">Kategorija povpraševanja <span class="text-brand-blue-deep">*</span></label>
             <select id="category-select" name="category" required
@@ -379,7 +381,9 @@
         email: formData.get('email'),
         phone: formData.get('phone'),
         category: formData.get('category'),
-        message: formData.get('message')
+        message: formData.get('message'),
+        website: formData.get('website'),
+        pageUrl: window.location.href
       };
 
       try {

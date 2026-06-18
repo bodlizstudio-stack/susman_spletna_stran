@@ -613,6 +613,8 @@
         <div class="grid lg:grid-cols-5 gap-8 lg:gap-10 lg:items-start">
           <div class="lg:col-span-3 scroll-reveal" style="transition-delay: 80ms">
             <form id="contact-form" class="form-card space-y-5 p-6 md:p-8 rounded-3xl bg-white border border-gray-100 shadow-lg shadow-brand-blue/10" novalidate>
+              <!-- Skrito polje za zaščito pred boti (Honeypot) -->
+              <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" />
               <!-- Skrita polja, ki se dejansko pošljejo na e-mail -->
               <input type="hidden" name="category" id="f-category" value="" />
 
@@ -896,7 +898,9 @@
         email: formData.get('email'),
         phone: formData.get('phone'),
         category: formData.get('category') || fCategory.value,
-        message: formData.get('message')
+        message: formData.get('message'),
+        website: formData.get('website'),
+        pageUrl: window.location.href
       };
 
       try {
