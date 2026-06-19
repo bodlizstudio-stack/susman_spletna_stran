@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
   rateLimit.set(ip, userRate);
 
   try {
-    const { name, email, phone, category, message, website, pageUrl } = req.body;
+    const { name, email, phone, category, message, website, pageUrl, selectedModel } = req.body;
 
     // 1. Validacija
     if (!name || !email || !message) {
@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
       to: receiverEmail,
       replyTo: email,
       subject: `Novo povpraševanje iz spletne strani PRO-S`,
-      text: `Dobili ste novo povpraševanje iz spletne strani PRO-S!\n\nIme in priimek: ${name}\nE-pošta: ${email}\nTelefon: ${phone || '/'}\nKategorija: ${category || '/'}\nStran/URL: ${sourceUrl}\nDatum in čas oddaje: ${currentDateTime}\n\nSporočilo:\n${message}\n`,
+      text: `Dobili ste novo povpraševanje iz spletne strani PRO-S!\n\nIme in priimek: ${name}\nE-pošta: ${email}\nTelefon: ${phone || '/'}\nKategorija: ${category || '/'}\nIzbrani model: ${selectedModel || '/'}\nStran/URL: ${sourceUrl}\nDatum in čas oddaje: ${currentDateTime}\n\nSporočilo:\n${message}\n`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
           <h2 style="color: #3B82B5;">Dobili ste novo povpraševanje!</h2>
@@ -91,6 +91,7 @@ module.exports = async (req, res) => {
             <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>E-pošta:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>
             <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Telefon:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${escapeHtml(phone || '/')}</td></tr>
             <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Kategorija:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${escapeHtml(category || '/')}</td></tr>
+            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Izbrani model:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #3B82B5; font-weight: bold;">${escapeHtml(selectedModel || '/')}</td></tr>
             <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Stran/URL:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><a href="${escapeHtml(sourceUrl)}">${escapeHtml(sourceUrl)}</a></td></tr>
             <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Datum oddaje:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${currentDateTime}</td></tr>
           </table>
@@ -123,6 +124,12 @@ module.exports = async (req, res) => {
               <p style="margin: 0; color: #3B82B5; font-weight: bold; font-size: 14px; text-transform: uppercase;">Kaj sledi?</p>
               <p style="margin: 8px 0 0 0; color: #333; font-size: 14px; line-height: 1.5;">Naša ekipa bo vaše povpraševanje podrobno pregledala. Potrudili se bomo, da vam odgovorimo v najkrajšem možnem času in za vas pripravimo najboljšo rešitev.</p>
             </div>
+            ${selectedModel ? `
+            <div style="background-color: #fff; border: 1px solid #A5D1E8; padding: 15px; border-radius: 5px; margin: 15px 0;">
+              <p style="margin: 0; color: #333; font-size: 14px;">Vaše povpraševanje vključuje naslednjo napravo:</p>
+              <p style="margin: 5px 0 0 0; color: #3B82B5; font-weight: bold; font-size: 16px;">${escapeHtml(selectedModel)}</p>
+            </div>
+            ` : ''}
             <p style="color: #666; font-size: 13px; line-height: 1.5;">To je samodejno potrditveno sporočilo. Prosimo, ne odgovarjajte neposredno nanj. Če imate dodatna vprašanja, nas lahko pokličete na <a href="tel:+38651374829" style="color: #3B82B5; text-decoration: none; font-weight: bold;">051 374 829</a> ali nam pišite.</p>
             <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;" />
             <p style="color: #1a1d23; font-size: 14px; margin: 0; line-height: 1.6;">

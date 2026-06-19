@@ -13,17 +13,33 @@ function createGalleryCard(item, index) {
   btn.type = 'button';
   btn.className = 'gallery-card lightbox-item group relative aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 shadow-sm text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2';
   btn.dataset.index = String(index);
-  btn.dataset.src = item.src;
+  btn.dataset.src = item.coverImage || item.src;
+  if (item.images && item.images.length > 0) {
+    btn.dataset.images = JSON.stringify(item.images);
+  } else if (item.coverImage || item.src) {
+    btn.dataset.images = JSON.stringify([item.coverImage || item.src]);
+  }
   btn.dataset.title = item.title;
   btn.setAttribute('aria-label', item.title + ' — povečaj sliko');
 
+  let multiImageIcon = '';
+  if (item.images && item.images.length > 1) {
+    multiImageIcon = `
+      <div class="absolute top-3 left-3 bg-brand-black/70 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1 backdrop-blur-sm pointer-events-none z-10">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        ${item.images.length}
+      </div>
+    `;
+  }
+
   btn.innerHTML = `
-    <img src="${item.src}" alt="${item.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+    <img src="${item.coverImage || item.src}" alt="${item.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
     ${galleryPlaceholderHtml(item.title)}
+    ${multiImageIcon}
     <div class="gallery-overlay absolute inset-0 bg-brand-black/0 group-hover:bg-brand-black/50 transition-all duration-300 flex items-end justify-center p-4 pointer-events-none">
       <span class="gallery-title translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 text-white text-sm sm:text-base font-bold text-center drop-shadow-lg">${item.title}</span>
     </div>
-    <div class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 text-brand-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md pointer-events-none" aria-hidden="true">
+    <div class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 text-brand-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md pointer-events-none z-10" aria-hidden="true">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
     </div>
   `;
@@ -46,7 +62,7 @@ function initGalleryGrid(containerId, items, options = {}) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const { limit, gridClass = 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4', staggerReveal = true } = options;
+  const { limit, gridClass = 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4', staggerReveal = false } = options;
   const list = limit ? items.slice(0, limit) : items;
 
   container.className = gridClass;
@@ -70,7 +86,7 @@ function initGalleryCategoryFilter(filterId, gridId, options = {}) {
   const grid = document.getElementById(gridId);
   if (!filterBar || !grid || typeof GALLERY_CATEGORIES === 'undefined') return;
 
-  const { limit, gridClass, staggerReveal = true } = options;
+  const { limit, gridClass, staggerReveal = false } = options;
   let active = 'all';
 
   const btn = (cat, isActive) => `
@@ -243,16 +259,24 @@ function initLightbox(showMoreLink) {
   }
 
   function openLightboxFromTrigger(trigger) {
-    const group = trigger.closest('[data-lightbox-group]');
-    const root = group || document;
-    const items = getVisibleLightboxItems(root);
-    slides = items.map((el) => ({
-      src: el.dataset.src || '',
-      title: el.dataset.title || '',
+    let imagesRaw = trigger.dataset.images;
+    let imagesArr = [];
+    if (imagesRaw) {
+      try { imagesArr = JSON.parse(imagesRaw); } catch(e) {}
+    }
+    if (!imagesArr || !imagesArr.length) {
+      imagesArr = [trigger.dataset.src];
+    }
+    
+    slides = imagesArr.map((src) => ({
+      src: src || '',
+      title: trigger.dataset.title || '',
     }));
+    
     if (!slides.length) return;
-    const idx = items.indexOf(trigger);
-    openAtIndex(idx >= 0 ? idx : 0);
+    let startIndex = parseInt(trigger.dataset.startIndex, 10);
+    if (isNaN(startIndex)) startIndex = 0;
+    openAtIndex(startIndex);
   }
 
   function step(delta) {
@@ -265,7 +289,10 @@ function initLightbox(showMoreLink) {
     lightboxImg.src = '';
     lightboxImg.classList.add('hidden');
     if (lightboxPlaceholder) lightboxPlaceholder.classList.add('hidden');
-    document.body.style.overflow = '';
+    const gridModal = document.getElementById('grid-modal');
+    if (!gridModal || gridModal.classList.contains('hidden')) {
+      document.body.style.overflow = '';
+    }
     slides = [];
     currentIndex = 0;
   }
@@ -301,3 +328,66 @@ function initLightbox(showMoreLink) {
 
   return { openLightbox: openLightboxFromTrigger, closeLightbox, openAtIndex };
 }
+
+
+function initGridModal() {
+  if (document.getElementById('grid-modal')) return;
+
+  const modal = document.createElement('div');
+  modal.id = 'grid-modal';
+  modal.className = 'fixed inset-0 z-[90] flex-col bg-brand-black/95 backdrop-blur-md hidden';
+  modal.innerHTML = `
+    <div class="flex items-center justify-between p-4 sm:p-6 border-b border-white/10">
+      <h3 id="grid-modal-title" class="text-white text-xl sm:text-2xl font-bold">Galerija</h3>
+      <button type="button" id="grid-modal-close" class="p-2 bg-white/10 hover:bg-white/25 rounded-full text-white transition-colors" aria-label="Zapri">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <div id="grid-modal-content" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 max-w-7xl mx-auto"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const closeBtn = document.getElementById('grid-modal-close');
+  const content = document.getElementById('grid-modal-content');
+  const title = document.getElementById('grid-modal-title');
+
+  closeBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+  });
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.grid-modal-trigger');
+    if (!trigger) return;
+    e.preventDefault();
+    
+    const imagesRaw = trigger.dataset.images;
+    let imagesArr = [];
+    if (imagesRaw) {
+      try { imagesArr = JSON.parse(imagesRaw); } catch(err) {}
+    }
+    if (!imagesArr || !imagesArr.length) return;
+    
+    title.textContent = trigger.dataset.title || 'Galerija';
+    
+    // Generate grid items
+    content.innerHTML = imagesArr.map((src, idx) => `
+      <button type="button" class="lightbox-item aspect-square rounded-xl overflow-hidden hover:ring-2 hover:ring-white transition-all focus:outline-none"
+        data-src="${src}" 
+        data-images='${imagesRaw}' 
+        data-title="${title.textContent}"
+        data-start-index="${idx}">
+        <img src="${src}" alt="Slika ${idx+1}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" loading="lazy">
+      </button>
+    `).join('');
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initGridModal);
