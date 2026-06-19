@@ -143,15 +143,26 @@
         </p>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-black mb-4">Vsi izvedeni projekti</h1>
         <p class="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
-          Izberite kategorijo — klimatske naprave ali prezračevanje. Kliknite za povečavo.
+          Naši izvedeni projekti.
         </p>
       </div>
 
-      <div id="gallery-filter" class="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-6 sm:mb-8"></div>
-      <div id="gallery-full" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"></div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
+        <div class="relative aspect-[4/3] rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
+          <img src="susman slike/klime/enostavna_zlita_z_okoljem.jpg" alt="Montaža klim" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+        <div class="relative aspect-[4/3] rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
+          <img src="susman slike/prezračevanje/IMG_7392.jpeg" alt="Prezračevanje" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+        <div class="relative aspect-[4/3] rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
+          <img src="susman slike/ogrevanje in vodovod/talno_gretje.jpg" alt="Ogrevanje in vodovod" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+      </div>
+
 
       <p class="mt-10 text-center text-sm text-gray-500">
-        <span id="gallery-count"></span> fotografij ·
+        
         <a href="index.html#kontakt" class="text-brand-blue-deep font-semibold hover:underline">Kontaktirajte nas</a> za podoben projekt
       </p>
     </div>
@@ -205,10 +216,8 @@
   <script src="gallery-data.js"></script>
   <script src="gallery.js"></script>
   <script>
-    initGalleryCategoryFilter('gallery-filter', 'gallery-full', {
-      gridClass: 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4',
-    });
-    initLightbox(false);
+    
+    
     initScrollReveal();
 
     const params = new URLSearchParams(location.search);
