@@ -631,7 +631,7 @@
           </a>
           <!-- Prezračevanje -->
           <a href="galerija.html" class="group relative aspect-[4/3] rounded-3xl overflow-hidden border border-gray-100 shadow-md hover:shadow-lg transition-all scroll-reveal" style="transition-delay: 100ms">
-            <img src="susman slike/prezračevanje/IMG_7392.jpeg" alt="Prezračevanje" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+            <img src="susman slike/prezračevanje/prezračevanje_hiše.jpg" alt="Prezračevanje" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
             <div class="absolute inset-0 bg-gradient-to-t from-brand-black/80 via-brand-black/20 to-transparent group-hover:from-brand-black/90 transition-all duration-300 flex items-end justify-center p-6">
               <span class="text-white text-xl md:text-2xl font-extrabold tracking-wide drop-shadow-md text-center translate-y-2 group-hover:translate-y-0 transition-transform duration-300">Prezračevanje</span>
             </div>
@@ -720,6 +720,13 @@
                   <textarea id="message" name="message" rows="4"
                     class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-brand-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue resize-y transition"
                     placeholder="Opišite vaše potrebe ali vprašanje ..."></textarea>
+                </div>
+
+                <div>
+                  <label for="attachments" class="block text-sm font-semibold text-gray-700 mb-1.5">Priloga <span class="text-xs font-normal text-gray-500">(slika ali dokument, po želji)</span></label>
+                  <input type="file" id="attachments" name="attachments" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+                    class="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-brand-black focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-blue-soft file:text-brand-blue-deep hover:file:bg-brand-blue/30" />
+                  <p class="text-xs text-gray-500 mt-1">Dovoljene so slike in dokumenti (največ 5 MB skupaj).</p>
                 </div>
 
                 <button type="submit" class="btn w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 font-bold text-brand-black bg-brand-blue hover:bg-brand-blue-dark hover:text-white rounded-xl transition-colors shadow-md shadow-brand-blue/25">
@@ -962,6 +969,28 @@
       });
     });
 
+    async function readFilesAsBase64(fileInput) {
+      if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        return [];
+      }
+      const files = Array.from(fileInput.files);
+      const promises = files.map(file => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            resolve({
+              filename: file.name,
+              path: e.target.result
+            });
+          };
+          reader.onerror = () => resolve(null);
+          reader.readAsDataURL(file);
+        });
+      });
+      const results = await Promise.all(promises);
+      return results.filter(r => r !== null);
+    }
+
     document.getElementById('contact-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
@@ -973,6 +1002,7 @@
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn.innerHTML;
       const successMsg = document.getElementById('form-success');
+      const formError = document.getElementById('form-error');
 
       // Set loading state
       submitBtn.disabled = true;
@@ -984,6 +1014,25 @@
         Pošiljam...
       `;
 
+      // Read files & check size limit (max 5 MB total)
+      const fileInput = document.getElementById('attachments');
+      let attachments = [];
+      if (fileInput && fileInput.files.length > 0) {
+        let totalSize = 0;
+        for (let i = 0; i < fileInput.files.length; i++) {
+          totalSize += fileInput.files[i].size;
+        }
+        if (totalSize > 5 * 1024 * 1024) {
+          formError.textContent = 'Skupna velikost prilog ne sme presegati 5 MB.';
+          formError.classList.remove('hidden');
+          setTimeout(() => formError.classList.add('hidden'), 8000);
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+          return;
+        }
+        attachments = await readFilesAsBase64(fileInput);
+      }
+
       const formData = new FormData(form);
       const data = {
         name: formData.get('name'),
@@ -992,11 +1041,11 @@
         category: formData.get('category') || fCategory.value,
         message: formData.get('message'),
         website: formData.get('website'),
-        pageUrl: window.location.href
+        pageUrl: window.location.href,
+        attachments: attachments
       };
 
       const formFields = document.getElementById('form-fields');
-      const formError = document.getElementById('form-error');
 
       try {
         const response = await fetch('/api/send-email', {

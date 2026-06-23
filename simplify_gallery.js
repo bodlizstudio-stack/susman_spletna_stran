@@ -9,7 +9,7 @@ const staticGalleryHtml = `
           <img src="susman slike/klime/enostavna_zlita_z_okoljem.jpg" alt="Montaža klim" class="w-full h-full object-cover" loading="lazy" />
         </div>
         <div class="relative aspect-[4/3] rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
-          <img src="susman slike/prezračevanje/IMG_7392.jpeg" alt="Prezračevanje" class="w-full h-full object-cover" loading="lazy" />
+          <img src="susman slike/prezračevanje/prezračevanje_hiše.jpg" alt="Prezračevanje" class="w-full h-full object-cover" loading="lazy" />
         </div>
         <div class="relative aspect-[4/3] rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
           <img src="susman slike/ogrevanje in vodovod/talno_gretje.jpg" alt="Ogrevanje in vodovod" class="w-full h-full object-cover" loading="lazy" />

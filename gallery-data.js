@@ -1,6 +1,5 @@
 /** Kategorije galerije */
 const GALLERY_CATEGORIES = [
-  { id: 'all', label: 'Vse' },
   { id: 'klima', label: 'Klimatske naprave' },
   { id: 'prezracevanje', label: 'Prezračevanje' },
   { id: 'ogrevanje-vodovod', label: 'Ogrevanje in vodovod' }
@@ -29,132 +28,12 @@ const GALLERY_ITEMS = [
     "alt": "Montaža klimatske naprave"
   },
   {
-    "id": "proj-3",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(32).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(32).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-4",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(34).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(34).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-5",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(37).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(37).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-6",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(38).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(38).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-7",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(40).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(40).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-8",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(41).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(41).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-9",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(43).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(43).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-10",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(44).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(44).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-11",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(7).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(7).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-12",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/FullSizeRender_(8).jpg",
-    "images": [
-      "susman slike/klime/FullSizeRender_(8).jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
     "id": "proj-13",
     "title": "Montaža klimatske naprave",
     "category": "klima",
     "coverImage": "susman slike/klime/IMG_1944.jpg",
     "images": [
       "susman slike/klime/IMG_1944.jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-14",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/IMG_7417.jpg",
-    "images": [
-      "susman slike/klime/IMG_7417.jpg"
-    ],
-    "alt": "Montaža klimatske naprave"
-  },
-  {
-    "id": "proj-15",
-    "title": "Montaža klimatske naprave",
-    "category": "klima",
-    "coverImage": "susman slike/klime/IMG_7419.jpeg",
-    "images": [
-      "susman slike/klime/IMG_7419.jpeg"
     ],
     "alt": "Montaža klimatske naprave"
   },
@@ -177,16 +56,6 @@ const GALLERY_ITEMS = [
       "susman slike/klime/klima_dnevna_soba.jpg"
     ],
     "alt": "Klima dnevna soba"
-  },
-  {
-    "id": "proj-18",
-    "title": "Mitsubishi",
-    "category": "klima",
-    "coverImage": "susman slike/klime/mitsubishi.jpg",
-    "images": [
-      "susman slike/klime/mitsubishi.jpg"
-    ],
-    "alt": "Mitsubishi"
   },
   {
     "id": "proj-19",
@@ -244,300 +113,6 @@ const GALLERY_ITEMS = [
       "susman slike/klime/Montaža stenske klimatske naprave Mitsubishi Electric6.jpg"
     ],
     "alt": "Montaža stenske klimatske naprave Mitsubishi Electric"
-  },
-  {
-    "id": "proj-24",
-    "title": "Montaža stenske klimatske naprave Sinclair",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža stenske klimatske naprave Sinclair.jpg",
-    "images": [
-      "susman slike/klime/Montaža stenske klimatske naprave Sinclair.jpg",
-      "susman slike/klime/Montaža stenske klimatske naprave Sinclair1.jpg",
-      "susman slike/klime/Montaža stenske klimatske naprave Sinclair2.jpg",
-      "susman slike/klime/Montaža stenske klimatske naprave Sinclair3.jpg"
-    ],
-    "alt": "Montaža stenske klimatske naprave Sinclair"
-  },
-  {
-    "id": "proj-25",
-    "title": "Montaža stenske klimatske naprave Vaillant",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža stenske klimatske naprave Vaillant.jpg",
-    "images": [
-      "susman slike/klime/Montaža stenske klimatske naprave Vaillant.jpg",
-      "susman slike/klime/Montaža stenske klimatske naprave Vaillant1.jpg"
-    ],
-    "alt": "Montaža stenske klimatske naprave Vaillant"
-  },
-  {
-    "id": "proj-26",
-    "title": "Montaža stropne klimatske naprave Sinclair",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža stropne klimatske naprave Sinclair.jpg",
-    "images": [
-      "susman slike/klime/Montaža stropne klimatske naprave Sinclair.jpg"
-    ],
-    "alt": "Montaža stropne klimatske naprave Sinclair"
-  },
-  {
-    "id": "proj-27",
-    "title": "Montaža talne klimatske naprave Mitsubishi Electric",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža talne klimatske naprave Mitsubishi Electric.jpg",
-    "images": [
-      "susman slike/klime/Montaža talne klimatske naprave Mitsubishi Electric.jpg"
-    ],
-    "alt": "Montaža talne klimatske naprave Mitsubishi Electric"
-  },
-  {
-    "id": "proj-28",
-    "title": "Montaža toplotne črpalke LG Therma V",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža toplotne črpalke LG Therma V.jpg",
-    "images": [
-      "susman slike/klime/Montaža toplotne črpalke LG Therma V.jpg"
-    ],
-    "alt": "Montaža toplotne črpalke LG Therma V"
-  },
-  {
-    "id": "proj-29",
-    "title": "Montaža zunanje enote Cooper & Hunter",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža zunanje enote Cooper & Hunter (2).jpg",
-    "images": [
-      "susman slike/klime/Montaža zunanje enote Cooper & Hunter (2).jpg",
-      "susman slike/klime/Montaža zunanje enote Cooper & Hunter.jpg"
-    ],
-    "alt": "Montaža zunanje enote Cooper & Hunter"
-  },
-  {
-    "id": "proj-30",
-    "title": "Montaža zunanje enote Daikin",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža zunanje enote Daikin.jpg",
-    "images": [
-      "susman slike/klime/Montaža zunanje enote Daikin.jpg"
-    ],
-    "alt": "Montaža zunanje enote Daikin"
-  },
-  {
-    "id": "proj-31",
-    "title": "Montaža zunanje enote Hisense",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža zunanje enote Hisense (2).jpg",
-    "images": [
-      "susman slike/klime/Montaža zunanje enote Hisense (2).jpg"
-    ],
-    "alt": "Montaža zunanje enote Hisense"
-  },
-  {
-    "id": "proj-32",
-    "title": "Montaža zunanje enote Mitsubishi Electric",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža zunanje enote Mitsubishi Electric (2).jpg",
-    "images": [
-      "susman slike/klime/Montaža zunanje enote Mitsubishi Electric (2).jpg",
-      "susman slike/klime/Montaža zunanje enote Mitsubishi Electric (3).jpg",
-      "susman slike/klime/Montaža zunanje enote Mitsubishi Electric (4).jpg",
-      "susman slike/klime/Montaža zunanje enote Mitsubishi Electric.jpg"
-    ],
-    "alt": "Montaža zunanje enote Mitsubishi Electric"
-  },
-  {
-    "id": "proj-33",
-    "title": "Montaža zunanjih enot klimatskih naprav",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža zunanjih enot klimatskih naprav.jpg",
-    "images": [
-      "susman slike/klime/Montaža zunanjih enot klimatskih naprav.jpg"
-    ],
-    "alt": "Montaža zunanjih enot klimatskih naprav"
-  },
-  {
-    "id": "proj-34",
-    "title": "Montaža zunanjih enot Mitsubishi Electric",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Montaža zunanjih enot Mitsubishi Electric.jpg",
-    "images": [
-      "susman slike/klime/Montaža zunanjih enot Mitsubishi Electric.jpg",
-      "susman slike/klime/Montaža zunanjih enot Mitsubishi Electric1.jpg",
-      "susman slike/klime/Montaža zunanjih enot Mitsubishi Electric2.jpg",
-      "susman slike/klime/Montaža zunanjih enot Mitsubishi Electric3.jpg",
-      "susman slike/klime/Montaža zunanjih enot Mitsubishi Electric4.jpg"
-    ],
-    "alt": "Montaža zunanjih enot Mitsubishi Electric"
-  },
-  {
-    "id": "proj-35",
-    "title": "Notranja montaža daikin",
-    "category": "klima",
-    "coverImage": "susman slike/klime/notranja_montaža_daikin.jpg",
-    "images": [
-      "susman slike/klime/notranja_montaža_daikin.jpg"
-    ],
-    "alt": "Notranja montaža daikin"
-  },
-  {
-    "id": "proj-36",
-    "title": "Osnovna montaža dnevna soba",
-    "category": "klima",
-    "coverImage": "susman slike/klime/osnovna_montaža_dnevna_soba.jpg",
-    "images": [
-      "susman slike/klime/osnovna_montaža_dnevna_soba.jpg"
-    ],
-    "alt": "Osnovna montaža dnevna soba"
-  },
-  {
-    "id": "proj-37",
-    "title": "Postavitev zunanjih enot blok",
-    "category": "klima",
-    "coverImage": "susman slike/klime/postavitev_zunanjih_enot_blok.jpg",
-    "images": [
-      "susman slike/klime/postavitev_zunanjih_enot_blok.jpg"
-    ],
-    "alt": "Postavitev zunanjih enot blok"
-  },
-  {
-    "id": "proj-38",
-    "title": "Servis klime",
-    "category": "klima",
-    "coverImage": "susman slike/klime/Servis_klime.jpg",
-    "images": [
-      "susman slike/klime/Servis_klime.jpg"
-    ],
-    "alt": "Servis klime"
-  },
-  {
-    "id": "proj-39",
-    "title": "Zunanja enota mitsubishi na strehi",
-    "category": "klima",
-    "coverImage": "susman slike/klime/zunanja_enota_mitsubishi_na_strehi.jpg",
-    "images": [
-      "susman slike/klime/zunanja_enota_mitsubishi_na_strehi.jpg"
-    ],
-    "alt": "Zunanja enota mitsubishi na strehi"
-  },
-  {
-    "id": "proj-40",
-    "title": "Zunanji del klime",
-    "category": "klima",
-    "coverImage": "susman slike/klime/zunanji_del_klime.jpg",
-    "images": [
-      "susman slike/klime/zunanji_del_klime.jpg"
-    ],
-    "alt": "Zunanji del klime"
-  },
-  {
-    "id": "proj-41",
-    "title": "Strojne inštalacije",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/FullSizeRender_(14).jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/FullSizeRender_(14).jpg"
-    ],
-    "alt": "Strojne inštalacije"
-  },
-  {
-    "id": "proj-42",
-    "title": "Strojne inštalacije",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/FullSizeRender_(39).jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/FullSizeRender_(39).jpg"
-    ],
-    "alt": "Strojne inštalacije"
-  },
-  {
-    "id": "proj-43",
-    "title": "Strojne inštalacije",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/image000001.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/image000001.jpg"
-    ],
-    "alt": "Strojne inštalacije"
-  },
-  {
-    "id": "proj-44",
-    "title": "Montaža bojlerja s priklopom ogrevalnega sistema",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/Montaža bojlerja s priklopom ogrevalnega sistema.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/Montaža bojlerja s priklopom ogrevalnega sistema.jpg"
-    ],
-    "alt": "Montaža bojlerja s priklopom ogrevalnega sistema"
-  },
-  {
-    "id": "proj-45",
-    "title": "Montaža zunanje enote toplotne črpalke Mitsubishi Electric Ecodan",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/Montaža notranje enote toplotne črpalke Mitsubishi Ecodan.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/Montaža notranje enote toplotne črpalke Mitsubishi Ecodan.jpg"
-    ],
-    "alt": "Montaža zunanje enote toplotne črpalke Mitsubishi Electric Ecodan"
-  },
-  {
-    "id": "proj-46",
-    "title": "Montaža zunanje enote toplotne črpalke Mitsubishi Electric Ecodan",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/Montaža zunanje enote Mitsubishi Electric Ecodan.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/Montaža zunanje enote Mitsubishi Electric Ecodan.jpg"
-    ],
-    "alt": "Montaža zunanje enote toplotne črpalke Mitsubishi Electric Ecodan"
-  },
-  {
-    "id": "proj-47",
-    "title": "Ogrevanje in vodovod montaža",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/ogrevanje_in_vodovod_montaža.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/ogrevanje_in_vodovod_montaža.jpg"
-    ],
-    "alt": "Ogrevanje in vodovod montaža"
-  },
-  {
-    "id": "proj-48",
-    "title": "Razvod talnega ogrevanja",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/Razvod talnega ogrevanja.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/Razvod talnega ogrevanja.jpg"
-    ],
-    "alt": "Razvod talnega ogrevanja"
-  },
-  {
-    "id": "proj-49",
-    "title": "Schneider Electric SM AirSeT razdelilni blok",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/Schneider Electric SM AirSeT razdelilni blok.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/Schneider Electric SM AirSeT razdelilni blok.jpg"
-    ],
-    "alt": "Schneider Electric SM AirSeT razdelilni blok"
-  },
-  {
-    "id": "proj-50",
-    "title": "Talno gretje",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/talno_gretje.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/talno_gretje.jpg"
-    ],
-    "alt": "Talno gretje"
-  },
-  {
-    "id": "proj-51",
-    "title": "Montaža toplotne črpalke LG Therma V",
-    "category": "ogrevanje-vodovod",
-    "coverImage": "susman slike/ogrevanje in vodovod/toplotna_črpalkaLG1.jpg",
-    "images": [
-      "susman slike/ogrevanje in vodovod/toplotna_črpalkaLG1.jpg",
-      "susman slike/ogrevanje in vodovod/toplotna_črpalkaLG2.jpg",
-      "susman slike/ogrevanje in vodovod/toplotna_črpalkaLG3.jpg"
-    ],
-    "alt": "Montaža toplotne črpalke LG Therma V"
   },
   {
     "id": "proj-52",
@@ -642,71 +217,110 @@ const GALLERY_ITEMS = [
     "alt": "Montaža prezračevalnih kanalov"
   },
   {
-    "id": "proj-62",
-    "title": "Montaža razdelilnih omaric za prezračevanje",
-    "category": "prezracevanje",
-    "coverImage": "susman slike/prezračevanje/Montaža razdelilnih omaric za prezračevanje.jpg",
+    "id": "proj-41",
+    "title": "Strojne inštalacije",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/FullSizeRender_(14).jpg",
     "images": [
-      "susman slike/prezračevanje/Montaža razdelilnih omaric za prezračevanje.jpg"
+      "susman slike/ogrevanje in vodovod/FullSizeRender_(14).jpg"
     ],
-    "alt": "Montaža razdelilnih omaric za prezračevanje"
+    "alt": "Strojne inštalacije"
   },
   {
-    "id": "proj-63",
-    "title": "Montaža strešne prezračevalne enote Sinclair",
-    "category": "prezracevanje",
-    "coverImage": "susman slike/prezračevanje/Montaža strešne prezračevalne enote Sinclair.jpg",
+    "id": "proj-42",
+    "title": "Strojne inštalacije",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/FullSizeRender_(39).jpg",
     "images": [
-      "susman slike/prezračevanje/Montaža strešne prezračevalne enote Sinclair.jpg"
+      "susman slike/ogrevanje in vodovod/FullSizeRender_(39).jpg"
     ],
-    "alt": "Montaža strešne prezračevalne enote Sinclair"
+    "alt": "Strojne inštalacije"
   },
   {
-    "id": "proj-64",
-    "title": "Prezračevanje hiše",
-    "category": "prezracevanje",
-    "coverImage": "susman slike/prezračevanje/prezračevanje_hiše.jpg",
+    "id": "proj-43",
+    "title": "Strojne inštalacije",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/image000001.jpg",
     "images": [
-      "susman slike/prezračevanje/prezračevanje_hiše.jpg",
-      "susman slike/prezračevanje/prezračevanje_hiše2.jpg"
+      "susman slike/ogrevanje in vodovod/image000001.jpg"
     ],
-    "alt": "Prezračevanje hiše"
+    "alt": "Strojne inštalacije"
   },
   {
-    "id": "proj-65",
-    "title": "Prezračevanje in klimatizacija vseh prostorov",
-    "category": "prezracevanje",
-    "coverImage": "susman slike/prezračevanje/prezračevanje_in_klimatizacija_vseh_prostorov.jpg",
+    "id": "proj-44",
+    "title": "Montaža bojlerja s priklopom ogrevalnega sistema",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/Montaža bojlerja s priklopom ogrevalnega sistema.jpg",
     "images": [
-      "susman slike/prezračevanje/prezračevanje_in_klimatizacija_vseh_prostorov.jpg"
+      "susman slike/ogrevanje in vodovod/Montaža bojlerja s priklopom ogrevalnega sistema.jpg"
     ],
-    "alt": "Prezračevanje in klimatizacija vseh prostorov"
+    "alt": "Montaža bojlerja s priklopom ogrevalnega sistema"
   },
   {
-    "id": "proj-66",
-    "title": "Prezračevanje skladišča",
-    "category": "prezracevanje",
-    "coverImage": "susman slike/prezračevanje/prezračevanje_skladišča.jpg",
+    "id": "proj-45",
+    "title": "Montaža zunanje enote toplotne črpalke Mitsubishi Electric Ecodan",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/Montaža notranje enote toplotne črpalke Mitsubishi Ecodan.jpg",
     "images": [
-      "susman slike/prezračevanje/prezračevanje_skladišča.jpg"
+      "susman slike/ogrevanje in vodovod/Montaža notranje enote toplotne črpalke Mitsubishi Ecodan.jpg"
     ],
-    "alt": "Prezračevanje skladišča"
+    "alt": "Montaža zunanje enote toplotne črpalke Mitsubishi Electric Ecodan"
   },
   {
-    "id": "proj-67",
-    "title": "Priprava instalacij v lesenem objektu",
-    "category": "prezracevanje",
-    "coverImage": "susman slike/prezračevanje/Priprava instalacij v lesenem objektu.jpg",
+    "id": "proj-46",
+    "title": "Montaža zunanje enote toplotne črpalke Mitsubishi Electric Ecodan",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/Montaža zunanje enote Mitsubishi Electric Ecodan.jpg",
     "images": [
-      "susman slike/prezračevanje/Priprava instalacij v lesenem objektu.jpg"
+      "susman slike/ogrevanje in vodovod/Montaža zunanje enote Mitsubishi Electric Ecodan.jpg"
     ],
-    "alt": "Priprava instalacij v lesenem objektu"
+    "alt": "Montaža zunanje enote toplotne črpalke Mitsubishi Electric Ecodan"
+  },
+  {
+    "id": "proj-47",
+    "title": "Ogrevanje in vodovod montaža",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/ogrevanje_in_vodovod_montaža.jpg",
+    "images": [
+      "susman slike/ogrevanje in vodovod/ogrevanje_in_vodovod_montaža.jpg"
+    ],
+    "alt": "Ogrevanje in vodovod montaža"
+  },
+  {
+    "id": "proj-48",
+    "title": "Razvod talnega ogrevanja",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/Razvod talnega ogrevanja.jpg",
+    "images": [
+      "susman slike/ogrevanje in vodovod/Razvod talnega ogrevanja.jpg"
+    ],
+    "alt": "Razvod talnega ogrevanja"
+  },
+  {
+    "id": "proj-49",
+    "title": "Schneider Electric SM AirSeT razdelilni blok",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/Schneider Electric SM AirSeT razdelilni blok.jpg",
+    "images": [
+      "susman slike/ogrevanje in vodovod/Schneider Electric SM AirSeT razdelilni blok.jpg"
+    ],
+    "alt": "Schneider Electric SM AirSeT razdelilni blok"
+  },
+  {
+    "id": "proj-50",
+    "title": "Talno gretje",
+    "category": "ogrevanje-vodovod",
+    "coverImage": "susman slike/ogrevanje in vodovod/talno_gretje.jpg",
+    "images": [
+      "susman slike/ogrevanje in vodovod/talno_gretje.jpg"
+    ],
+    "alt": "Talno gretje"
   }
 ];
 
 const GALLERY_PREVIEW_COUNT = 6;
 
 function galleryItemsByCategory(category) {
-  if (!category || category === 'all') return GALLERY_ITEMS;
+  if (!category) return GALLERY_ITEMS;
   return GALLERY_ITEMS.filter((item) => item.category === category);
 }

@@ -87,7 +87,7 @@ function initGalleryCategoryFilter(filterId, gridId, options = {}) {
   if (!filterBar || !grid || typeof GALLERY_CATEGORIES === 'undefined') return;
 
   const { limit, gridClass, staggerReveal = false } = options;
-  let active = 'all';
+  let active = GALLERY_CATEGORIES[0]?.id || 'klima';
 
   const btn = (cat, isActive) => `
     <button type="button" class="gallery-cat-btn px-4 sm:px-5 py-2.5 rounded-full text-sm font-bold border transition-all whitespace-nowrap

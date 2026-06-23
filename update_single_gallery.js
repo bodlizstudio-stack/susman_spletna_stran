@@ -16,13 +16,14 @@ projects.forEach(p => {
 });
 
 const getNewGalleryHtml = (cat, titleText) => {
-  const images = categoryImages[cat];
+  // Slice to exactly 10 images as requested
+  const images = categoryImages[cat].slice(0, 10);
   const imagesStr = JSON.stringify(images).replace(/'/g, "&#39;");
   const cover = images[0];
   const count = images.length;
   
   return `<div class="flex justify-center">
-          <button type="button" class="gallery-card lightbox-item group relative w-full max-w-3xl aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden border border-gray-100 shadow-md hover:shadow-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 scroll-reveal" 
+          <button type="button" class="gallery-card grid-modal-trigger group relative w-full max-w-3xl aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden border border-gray-100 shadow-md hover:shadow-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 scroll-reveal" data-open-grid="true" 
             data-src="${cover}" data-title="${titleText}" data-images='${imagesStr}'>
             <img src="${cover}" alt="${titleText}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
             <div class="absolute inset-0 bg-brand-black/40 group-hover:bg-brand-black/60 transition-all duration-300 flex flex-col items-center justify-center pointer-events-none p-4">
@@ -48,10 +49,9 @@ pages.forEach(p => {
   let html = fs.readFileSync(p.file, 'utf8');
   
   // We need to replace the grid block under "Naše delo v sliki"
-  // The block starts with <div class="grid sm:grid-cols-3... and ends 3 buttons later.
-  // We can use a regex that finds the "Naše delo v sliki" header and replaces the next grid container.
+  // The block starts with <div class="text-center... and contains <div class="flex justify-center">...
   
-  const searchPattern = /(<h2 class="text-2xl sm:text-3xl font-extrabold text-brand-black">Naše delo v sliki<\/h2>\s*<p class="text-gray-500 text-sm mt-1">Kliknite na sliko za povečavo\.<\/p>\s*<\/div>\s*)<div class="grid sm:grid-cols-3 gap-6 lg:gap-8"[\s\S]*?<\/button>\s*<\/div>/;
+  const searchPattern = /(<h2 class="text-2xl sm:text-3xl font-extrabold text-brand-black">Naše delo v sliki<\/h2>\s*<p class="text-gray-500 text-sm mt-1">Kliknite na sliko za povečavo\.<\/p>\s*<\/div>\s*)<div class="flex justify-center"[\s\S]*?<\/button>\s*<\/div>/;
   
   html = html.replace(searchPattern, `$1${getNewGalleryHtml(p.cat, p.title)}`);
   

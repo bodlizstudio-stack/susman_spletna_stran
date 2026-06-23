@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
   rateLimit.set(ip, userRate);
 
   try {
-    const { name, email, phone, category, message, website, pageUrl, selectedModel } = req.body;
+    const { name, email, phone, category, message, website, pageUrl, selectedModel, attachments } = req.body;
 
     // 1. Validacija
     if (!name || !email || !message) {
@@ -75,13 +75,25 @@ module.exports = async (req, res) => {
     const currentDateTime = new Date().toLocaleString('sl-SI', { timeZone: 'Europe/Ljubljana' });
     const sourceUrl = pageUrl || 'Neznano';
 
+    let attachmentsListHtml = '';
+    let attachmentsListText = '';
+    if (attachments && attachments.length > 0) {
+      attachmentsListText = `\n\nPriloge:\n${attachments.map(att => '- ' + att.filename).join('\n')}`;
+      attachmentsListHtml = `
+        <h3 style="margin-top: 20px; color: #3B82B5;">Priloge:</h3>
+        <ul style="background-color: #f9f9f9; padding: 15px 15px 15px 30px; border-radius: 8px; border: 1px solid #eee; margin: 0; font-size: 14px;">
+          ${attachments.map(att => `<li>${escapeHtml(att.filename)}</li>`).join('')}
+        </ul>
+      `;
+    }
+
     // 4. Pošiljanje e-pošte
     const mailOptions = {
       from: `"PRO-S spletna stran" <${senderEmail}>`,
       to: receiverEmail,
       replyTo: email,
       subject: `Novo povpraševanje iz spletne strani PRO-S`,
-      text: `Dobili ste novo povpraševanje iz spletne strani PRO-S!\n\nIme in priimek: ${name}\nE-pošta: ${email}\nTelefon: ${phone || '/'}\nKategorija: ${category || '/'}\nIzbrani model: ${selectedModel || '/'}\nStran/URL: ${sourceUrl}\nDatum in čas oddaje: ${currentDateTime}\n\nSporočilo:\n${message}\n`,
+      text: `Dobili ste novo povpraševanje iz spletne strani PRO-S!\n\nIme in priimek: ${name}\nE-pošta: ${email}\nTelefon: ${phone || '/'}\nKategorija: ${category || '/'}\nIzbrani model: ${selectedModel || '/'}\nStran/URL: ${sourceUrl}\nDatum in čas oddaje: ${currentDateTime}\n\nSporočilo:\n${message}${attachmentsListText}\n`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
           <h2 style="color: #3B82B5;">Dobili ste novo povpraševanje!</h2>
@@ -99,8 +111,10 @@ module.exports = async (req, res) => {
           <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
             <p style="margin: 0; white-space: pre-wrap;">${escapeHtml(message)}</p>
           </div>
+          ${attachmentsListHtml}
         </div>
       `,
+      attachments: attachments
     };
 
     await transporter.sendMail(mailOptions);
